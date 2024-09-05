@@ -1,3 +1,2 @@
-const API_KEY = ''
 
-console.log("holi")
+console.log("holi") 
