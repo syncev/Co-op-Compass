@@ -1,11 +1,22 @@
 {
   "name": "curso-api-rest-javascript-practico",
   "version": "1.0.0",
-  "description": "",
+  "description": "Practico de Curso API REST JS de PLATZI",
   "main": "index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "vite",
+    "build": "vite build"
   },
   "author": "syncev",
-  "license": "MIT"
+  "license": "MIT",
+  "keywords": [],
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "vite": "^5.4.8"
+  },
+  "devDependencies": {
+    "sass-embedded": "^1.79.4"
+  }
 }

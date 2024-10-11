@@ -1,0 +1,45 @@
+$primary-color: #110B22;
+$secondary-color: #291C3A;
+$primaryBtn-color: #7EA9DC;
+$primaryFont-color: #FFFFFF;
+
+$test: red 1px solid;
+
+.primaryHeader{
+    font-size: 36px;
+    font-weight: 600;
+    font-family: 'Clash Display', sans-serif;
+}
+
+.secondaryHeader{
+    font-size: 22px;
+    font-weight: 600;
+    font-family: 'Clash Display', sans-serif;
+
+}
+li{
+    font-size: 16px;
+    font-weight: 400;
+    font-family: 'Clash Display', sans-serif;
+    color: #FFFFFF;
+}
+
+.footer-text{
+    font-size: 12px;
+    font-weight: 200;
+    font-family: 'Cabinet Grotesk', sans-serif;
+    color: #FFFFFF;
+}
+
+img{
+    width: 100px;
+}
+.seeMore-btn{
+    background-color: $primaryBtn-color;
+    border-radius: 8px;
+    padding: 10px 15px;
+    border: none;
+    font-size: 18px;
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 800;
+  }
