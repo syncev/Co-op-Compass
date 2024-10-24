@@ -290,6 +290,107 @@ body {
       }
     }
   }
+
+  .gameDescription{
+    position: relative;
+    .gameCover{
+      
+      background-image: url("../assets/hogwarts-legacy.png");
+      height: 60dvh;
+      background-attachment: fixed;
+      background-position:center -150px ;
+      background-repeat: no-repeat;
+      background-size: cover;
+      
+    }
+    .gameCard{
+      border: $test;
+      background-color: $primary-color;
+      padding: 30px;
+      border-radius: 30px 30px 0 0 ;
+      height: fit-content;
+      .gameCard-title-wrapper{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 15px;
+        .gameTitle{
+          font-size: 30px;
+        }
+        .gameCard-rating{
+          font-size: 30px;
+          color: white;
+          display: flex;
+          flex-direction: row;
+          gap: 5px;
+          align-items: center;
+          font-weight: 500;
+         .gameCard-rating-star{
+            color: gold;
+          }
+        }
+      }
+      .gameCard-genre-wrapper{
+        color: white;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        font-size: 18px;
+        padding-top: 30px;
+        font-weight: 600;
+      }
+      .gameCard-description-wrapper{
+        color: white;
+        padding-top: 30px;
+        font-weight: 400;
+        text-align: center;
+        width: 90%;
+      }
+      .gameCard-screenshots-wrapper{
+        display: flex;
+        flex-direction: column;
+        padding-top: 30px;
+        .gameCard-screenshots-title{
+          color: white;
+          font-size: 20px;
+          font-weight: 600;
+        }
+        .gameCard-screenshots-list{
+          display: flex;
+          flex-direction: inherit;
+          justify-content: center;
+          align-items: center;
+          padding-top: 20px;
+          gap: 15px;
+          .gameCard-screenshots{
+            img{
+              width: 250px;
+              border-radius: 15px;
+              
+            }
+          }
+        }
+      }
+      .similarGames-wrapper{
+        padding-top: 30px;
+        .similarGames-title{
+          color: white;
+          font-weight: 600;
+          font-size: 20px;
+        }
+        .similarGames-list{
+          padding-top: 20px;
+          display: flex;
+          flex-direction: row;
+          img{
+            width: 100px;
+          }
+        }
+      }
+    }
+  }
+
+
   footer {
     padding: 15px 0;
     background-color: $secondary-color;

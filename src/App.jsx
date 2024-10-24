@@ -1,11 +1,10 @@
 import React from "react";
 import logo from "./assets/logo.png";
-import reset from "./assets/reset.png"
-
+import reset from "./assets/reset.png";
 function App() {
   return (
     <div className="appContainer">
-      <header>
+      <header className="hidden">
         <span className="header-arrow">&lt;</span>
         <div className="logo-wrapper">
           <img src={logo} alt="" className="logo" />
@@ -29,7 +28,7 @@ function App() {
           <button className="seeMore-btn">See More</button>
         </div>
 
-        <article className="topRated-list">
+        <article className="topRated-list ">
           <div>
             <img src="./src/assets/hogwarts-legacy.png" alt="" />
           </div>
@@ -48,7 +47,7 @@ function App() {
         </article>
       </section>
 
-      <section className="genericList-wrapper">
+      <section className="genericList-wrapper hidden">
         <div className="genericList-filter">
           <button className="filterBtn-wrapper">
             <img className="filterImg" src="./src/assets/filter.png" alt="" />
@@ -56,7 +55,9 @@ function App() {
           </button>
           <div className="filterPicker hidden">
             <div className="filterPicker-btn">
-              <button className="filterResetBtn"><img src={reset} alt="" /></button>
+              <button className="filterResetBtn">
+                <img src={reset} alt="" />
+              </button>
               <button className="filterConfirmBtn">OK</button>
             </div>
             <div className="filterPicker-categories">
@@ -138,24 +139,19 @@ function App() {
                 <h3>Players</h3>
                 <form action="">
                   <label htmlFor="">
-                    <input type="checkbox" />
-                    2
+                    <input type="checkbox" />2
                   </label>
                   <label htmlFor="">
-                    <input type="checkbox" />
-                    3
+                    <input type="checkbox" />3
                   </label>
                   <label htmlFor="">
-                    <input type="checkbox" />
-                    4
+                    <input type="checkbox" />4
                   </label>
                   <label htmlFor="">
-                    <input type="checkbox" />
-                    5
+                    <input type="checkbox" />5
                   </label>
                   <label htmlFor="">
-                    <input type="checkbox" />
-                    6
+                    <input type="checkbox" />6
                   </label>
                   <label htmlFor="">
                     <input type="checkbox" />
@@ -210,7 +206,7 @@ function App() {
         </div>
       </section>
 
-      <section className="categories ">
+      <section className="categories hidden">
         <div className="categories-header">
           <h2 className="secondaryHeader">Categorias</h2>
           <button className="seeMore-btn">See More</button>
@@ -237,31 +233,65 @@ function App() {
         </ul>
       </section>
 
-      <section className="gameDescription hidden">
-        <div>
-          <h2>Game Title</h2>
-          <span>7.6</span>
-          <p>
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dolorem
-            accusantium ad provident fugiat nam enim dolore quo laudantium saepe
-            aperiam aliquam et alias harum odio doloribus, suscipit repudiandae
-            ipsa voluptate.
-          </p>
+      <section className="gameDescription ">
+        <div className="gameCover">
+          {/* <img src="./src/assets/hogwarts-legacy.png" alt="" /> */}
         </div>
-        <article className="similarGames-list">
-          <h2>Similar Games</h2>
-          <div>
-            <div>
-              <img src="./src/assets/hogwarts-legacy.png" alt="" />
+        <div className="gameCard">
+          <div className="gameInfo">
+            <div className="gameCard-title-wrapper">
+              <h2 className="gameTitle">Game Title</h2>
+              <div className="gameCard-rating">
+                <span className="gameCard-rating-star">
+                  <i className="fa-solid fa-star fa-sm" />
+                </span>
+                <span className="gameCard-rating-number regularText">7.6</span>
+              </div>
             </div>
-            <div>
-              <img src="./src/assets/hogwarts-legacy.png" alt="" />
+            <div className="gameCard-genre-wrapper">
+              <span className="regularText">Action</span>
+              <span className="regularText">Adventure</span>
             </div>
-            <div>
-              <img src="./src/assets/hogwarts-legacy.png" alt="" />
+            <div className="gameCard-description-wrapper">
+              <p className="gameCard-description regularText">
+                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                Dolorem accusantium ad provident fugiat nam enim dolore quo
+                laudantium saepe aperiam aliquam et alias harum odio doloribus,
+                suscipit repudiandae ipsa voluptate.
+              </p>
+            </div>
+            <div className="gameCard-screenshots-wrapper">
+              <h3 className="gameCard-screenshots-title regularText">
+                Screenshots
+              </h3>
+              <div className="gameCard-screenshots-list">
+                <div className="gameCard-screenshots">
+                  <img src="./src/assets/hogwarts-legacy.png" alt="" />
+                </div>
+                <div className="gameCard-screenshots">
+                  <img src="./src/assets/hogwarts-legacy.png" alt="" />
+                </div>
+                <div className="gameCard-screenshots">
+                  <img src="./src/assets/hogwarts-legacy.png" alt="" />
+                </div>
+              </div>
             </div>
           </div>
-        </article>
+          <article className="similarGames-wrapper">
+            <h2 className="similarGames-title regularText">Similar Games</h2>
+            <div className="similarGames-list">
+              <div>
+                <img src="./src/assets/hogwarts-legacy.png" alt="" />
+              </div>
+              <div>
+                <img src="./src/assets/hogwarts-legacy.png" alt="" />
+              </div>
+              <div>
+                <img src="./src/assets/hogwarts-legacy.png" alt="" />
+              </div>
+            </div>
+          </article>
+        </div>
       </section>
 
       <footer>
