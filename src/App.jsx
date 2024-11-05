@@ -4,8 +4,8 @@ import reset from "./assets/reset.png";
 function App() {
   return (
     <div className="appContainer">
+      <span className="header-arrow">&lt;</span>
       <header className="hidden">
-        <span className="header-arrow">&lt;</span>
         <div className="logo-wrapper">
           <img src={logo} alt="" className="logo" />
           <h1 className="logo-title primaryHeader">
@@ -234,9 +234,7 @@ function App() {
       </section>
 
       <section className="gameDescription ">
-        <div className="gameCover">
-          {/* <img src="./src/assets/hogwarts-legacy.png" alt="" /> */}
-        </div>
+        <div className="gameCover"></div>
         <div className="gameCard">
           <div className="gameInfo">
             <div className="gameCard-title-wrapper">
@@ -280,6 +278,9 @@ function App() {
           <article className="similarGames-wrapper">
             <h2 className="similarGames-title regularText">Similar Games</h2>
             <div className="similarGames-list">
+              <div>
+                <img src="./src/assets/hogwarts-legacy.png" alt="" />
+              </div>
               <div>
                 <img src="./src/assets/hogwarts-legacy.png" alt="" />
               </div>

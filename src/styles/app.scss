@@ -15,8 +15,15 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: $primary-color;
+  // background-color: $primary-color;
   min-height: 100dvh;
+  .header-arrow {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    color: white;
+    font-size: 30px;
+  }
   header {
     .logo-wrapper {
       display: flex;
@@ -32,6 +39,7 @@ body {
     .search-wrapper {
       width: 80dvw;
       #searchForm {
+        margin-top: 30px;
         padding: 2%;
         border-radius: 7px;
         width: inherit;
@@ -142,7 +150,7 @@ body {
           font-size: 25px;
         }
       }
-      .filterPicker{
+      .filterPicker {
         width: 90%;
         border: $filterFrame 1px solid;
         position: absolute;
@@ -150,61 +158,62 @@ body {
         background-color: $primary-color;
         left: 50%;
         transform: translateX(-50%);
-        .filterPicker-btn{
+        .filterPicker-btn {
           display: flex;
           gap: 50px;
           justify-content: center;
           margin: 15px;
-          .filterResetBtn{
+          .filterResetBtn {
             background-color: $resetBtnColor;
           }
-          .filterConfirmBtn{
+          .filterConfirmBtn {
             background-color: $primaryBtn-color;
             font-size: 22px;
           }
-          .filterResetBtn, .filterConfirmBtn{
+          .filterResetBtn,
+          .filterConfirmBtn {
             padding: 5px 15px;
             border-radius: 12px;
             border: none;
             width: 70px;
-            img{
+            img {
               width: 25px;
               height: 25px;
             }
           }
         }
-      .filterPicker-categories{
-        display: flex;
-        flex-direction: column;
-        div{
-          h3{
-            font-size: 25px;
-            color: white;
-            padding-left: 15px;
-            padding-bottom: 20px;
-          }
-          form{
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 5px;
-            padding-bottom: 30px;
-            label{
-              padding-left: 30px;
+        .filterPicker-categories {
+          display: flex;
+          flex-direction: column;
+          div {
+            h3 {
+              font-size: 25px;
               color: white;
-              display: flex;
-              align-items: center;
+              padding-left: 15px;
+              padding-bottom: 20px;
+            }
+            form {
+              display: grid;
+              grid-template-columns: repeat(2, minmax(0, 1fr));
               gap: 5px;
-              input{
-                border: pink;
-                background-color: none;
-                accent-color: $primaryBtn-color;
-                width: 20px;
-                height: 20px;
+              padding-bottom: 30px;
+              label {
+                padding-left: 30px;
+                color: white;
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                input {
+                  border: pink;
+                  background-color: none;
+                  accent-color: $primaryBtn-color;
+                  width: 20px;
+                  height: 20px;
+                }
               }
             }
           }
         }
-      }
       }
     }
     .genericList {
@@ -291,33 +300,33 @@ body {
     }
   }
 
-  .gameDescription{
-    position: relative;
-    .gameCover{
-      
+  .gameDescription {
+    .gameCover {
       background-image: url("../assets/hogwarts-legacy.png");
       height: 60dvh;
       background-attachment: fixed;
-      background-position:center -150px ;
+      background-position: center -250px;
       background-repeat: no-repeat;
       background-size: cover;
-      
+      margin-top: -15px;
     }
-    .gameCard{
-      border: $test;
+    .gameCard {
       background-color: $primary-color;
-      padding: 30px;
-      border-radius: 30px 30px 0 0 ;
+      padding: 30px 0;
+      margin-top: -50px;
+      border-radius: 30px 30px 0 0;
       height: fit-content;
-      .gameCard-title-wrapper{
+      box-sizing: border-box;
+      width: 100%;
+      .gameCard-title-wrapper {
         display: flex;
         flex-direction: row;
-        justify-content: space-between;
+        justify-content: space-around;
         gap: 15px;
-        .gameTitle{
+        .gameTitle {
           font-size: 30px;
         }
-        .gameCard-rating{
+        .gameCard-rating {
           font-size: 30px;
           color: white;
           display: flex;
@@ -325,12 +334,12 @@ body {
           gap: 5px;
           align-items: center;
           font-weight: 500;
-         .gameCard-rating-star{
+          .gameCard-rating-star {
             color: gold;
           }
         }
       }
-      .gameCard-genre-wrapper{
+      .gameCard-genre-wrapper {
         color: white;
         display: flex;
         flex-direction: row;
@@ -339,57 +348,69 @@ body {
         padding-top: 30px;
         font-weight: 600;
       }
-      .gameCard-description-wrapper{
+      .gameCard-description-wrapper {
         color: white;
         padding-top: 30px;
         font-weight: 400;
         text-align: center;
+        margin: 0 auto;
         width: 90%;
       }
-      .gameCard-screenshots-wrapper{
+      .gameCard-screenshots-wrapper {
         display: flex;
         flex-direction: column;
         padding-top: 30px;
-        .gameCard-screenshots-title{
+        .gameCard-screenshots-title {
           color: white;
           font-size: 20px;
           font-weight: 600;
+          padding-left: 30px;
         }
-        .gameCard-screenshots-list{
+        .gameCard-screenshots-list {
           display: flex;
           flex-direction: inherit;
           justify-content: center;
           align-items: center;
           padding-top: 20px;
           gap: 15px;
-          .gameCard-screenshots{
-            img{
+          .gameCard-screenshots {
+            img {
               width: 250px;
               border-radius: 15px;
-              
             }
           }
         }
       }
-      .similarGames-wrapper{
-        padding-top: 30px;
-        .similarGames-title{
+      .similarGames-wrapper {
+        padding: 30px 0;
+        width: 100dvw;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+
+        .similarGames-title {
           color: white;
           font-weight: 600;
           font-size: 20px;
+          padding-left: 30px;
         }
-        .similarGames-list{
-          padding-top: 20px;
+        .similarGames-list {
+          padding: 30px 20px 0px 20px;
           display: flex;
           flex-direction: row;
-          img{
-            width: 100px;
+          align-items: center;
+          gap: 10dvw;
+          overflow-x: scroll;
+          img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 15px;
           }
         }
       }
     }
   }
-
 
   footer {
     padding: 15px 0;
