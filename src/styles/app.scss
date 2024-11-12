@@ -23,6 +23,7 @@ body {
     top: 20px;
     color: white;
     font-size: 30px;
+    cursor: pointer;
   }
   header {
     .logo-wrapper {
@@ -55,11 +56,12 @@ body {
             outline: none;
           }
         }
-        button {
+        .searchBtn {
           border: 0;
           border-radius: 50%;
           width: 30px;
           height: 30px;
+          cursor: pointer;
           img {
             width: 15px;
           }
@@ -233,6 +235,7 @@ body {
         flex-direction: column;
         gap: 10px;
         position: relative;
+        cursor: pointer;
         img {
           border-radius: 15px;
           width: auto;
@@ -298,9 +301,29 @@ body {
         }
       }
     }
+    .more-btn {
+      width: fit-content;
+      margin: 0 auto;
+      background-color: $primaryBtn-color;
+      border-radius: 8px;
+      padding: 5px 15px;
+      font-size: 18px;
+      font-family: "Cabinet Grotesk", sans-serif;
+      font-weight: 800;
+      cursor: pointer;
+      border: none;
+    }
   }
 
   .gameDescription {
+    .gameCard-arrow {
+      position: absolute;
+      left: 20px;
+      top: 20px;
+      color: white;
+      font-size: 30px;
+      cursor: pointer;
+    }
     .gameCover {
       background-image: url("../assets/hogwarts-legacy.png");
       height: 60dvh;
@@ -419,6 +442,6 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: auto;
+    margin-top: 20px;
   }
 }
