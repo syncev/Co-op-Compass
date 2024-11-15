@@ -7,7 +7,5 @@ import './styles/reset.css';
 import './styles/app.scss';
 // Create a root and render the App component into the root div
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
     <App />
-  </React.StrictMode>
 );
