@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef } from "react";
 import logo from "./assets/logo.png";
 import reset from "./assets/reset.png";
 import API_KEY from "./secrets.js";
@@ -38,13 +38,11 @@ function App() {
     event.preventDefault();
     genericListView();
   };
-  const topRatedBtnHandler = (id) => {
+  const topRatedBtnHandler = () => {
     genericListView();
   };
 
-  function toggleGameCard() {
-    
-  }
+  
   const gamePickHandler = (id) => {
     headerRef.current.classList.add("hidden");
     gameDescriptionRef.current.classList.remove("hidden");
