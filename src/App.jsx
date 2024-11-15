@@ -43,27 +43,26 @@ function App() {
   };
 
   function toggleGameCard() {
-    headerRef.current.classList.toggle("hidden");
-    genericListRef.current.classList.add("hidden");
-    gameDescriptionRef.current.classList.toggle("hidden");
-    topRatedRef.current.classList.toggle("hidden");
-    categoriesRef.current.classList.add("hidden");
+    
   }
   const gamePickHandler = (id) => {
-    toggleGameCard();
+    headerRef.current.classList.add("hidden");
+    gameDescriptionRef.current.classList.remove("hidden");
+    topRatedRef.current.classList.add("hidden");
+    categoriesRef.current.classList.add("hidden");
     getGameDescription(id);
   };
 
   const gamePickBackHandler = () => {
-    headerRef.current.classList.remove("hidden");
-    genericListRef.current.classList.add("hidden");
-    topRatedRef.current.classList.remove("hidden");
-    categoriesRef.current.classList.remove("hidden");
-
     while (gameDescriptionRef.current.firstChild) {
       gameDescriptionRef.current.removeChild(
         gameDescriptionRef.current.firstChild
       );
+    headerRef.current.classList.remove("hidden");
+    gameDescriptionRef.current.classList.add("hidden");
+    topRatedRef.current.classList.remove("hidden");
+    categoriesRef.current.classList.remove("hidden");
+
     }
   };
 
@@ -478,69 +477,7 @@ function App() {
         <button className="more-btn">More</button>
       </section>
       <section className="gameDescription hidden" ref={gameDescriptionRef}>
-        {/* <span
-          className="gameCard-arrow "
-          onClick={gamePickBackHandler}
-          ref={gameCardArrowRef}
-        >
-          &lt;
-        </span>
-        <div className="gameCover"></div>
-        <div className="gameCard">
-          <div className="gameInfo">
-            <div className="gameCard-title-wrapper">
-              <h2 className="gameTitle">Game Title</h2>
-              <div className="gameCard-rating">
-                <span className="gameCard-rating-star">
-                  <i className="fa-solid fa-star fa-sm" />
-                </span>
-                <span className="gameCard-rating-number regularText">7.6</span>
-              </div>
-            </div>
-
-            <div className="gameCard-description-wrapper">
-              <p className="gameCard-description regularText">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                Dolorem accusantium ad provident fugiat nam enim dolore quo
-                laudantium saepe aperiam aliquam et alias harum odio doloribus,
-                suscipit repudiandae ipsa voluptate.
-              </p>
-            </div>
-            <div className="gameCard-screenshots-wrapper">
-              <h3 className="gameCard-screenshots-title regularText">
-                Screenshots
-              </h3>
-              <div className="gameCard-screenshots-list">
-                <div className="gameCard-screenshots">
-                  <img src="./src/assets/hogwarts-legacy.png" alt="" />
-                </div>
-                <div className="gameCard-screenshots">
-                  <img src="./src/assets/hogwarts-legacy.png" alt="" />
-                </div>
-                <div className="gameCard-screenshots">
-                  <img src="./src/assets/hogwarts-legacy.png" alt="" />
-                </div>
-              </div>
-            </div>
-          </div>
-          <article className="similarGames-wrapper">
-            <h2 className="similarGames-title regularText">Similar Games</h2>
-            <div className="similarGames-list">
-              <div>
-                <img src="./src/assets/hogwarts-legacy.png" alt="" />
-              </div>
-              <div>
-                <img src="./src/assets/hogwarts-legacy.png" alt="" />
-              </div>
-              <div>
-                <img src="./src/assets/hogwarts-legacy.png" alt="" />
-              </div>
-              <div>
-                <img src="./src/assets/hogwarts-legacy.png" alt="" />
-              </div>
-            </div>
-          </article>
-        </div>  */}
+       
       </section>
 
       <footer>
