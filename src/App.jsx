@@ -4,6 +4,8 @@ import reset from "./assets/reset.png";
 import API_KEY from "./secrets.js";
 function App() {
   var homePage = true;
+  var currentGameId;
+  var newGameId;
 
   const headerArrowRef = useRef(null);
   const headerRef = useRef(null);
@@ -47,7 +49,7 @@ function App() {
     getTrendingGamesPreview(40, ".genericList");
   }
 
-  function showGameCard(){
+  function showGameCard() {
     headerRef.current.classList.add("hidden");
     headerArrowRef.current.classList.add("hidden");
     filterPicker.current.classList.add("hidden");
@@ -57,16 +59,17 @@ function App() {
     categoriesRef.current.classList.add("hidden");
   }
   function gamePickHandler(id) {
-    showGameCard();
     const gameCard = document.querySelector(".gameDescription");
-    if(!gameCard.children){
-    getGameDescription(id);
-    } else if (gameCard.children){
-      while (gameCard.firstChild) {
+    if (!gameCard.children) {
+      getGameDescription(id);
+    } else if (gameCard.children && currentGameId !== id) {
+      while (gameCard.firstChild ) {
         gameCard.removeChild(gameCard.firstChild);
       }
       getGameDescription(id);
-    }
+    } 
+    showGameCard();
+    currentGameId = id;
   }
   function gameCardHide() {
     gameDescriptionRef.current.classList.add("hidden");
@@ -134,7 +137,7 @@ function App() {
         const topRatedDiv = document.createElement("div");
         const topRatedImg = document.createElement("img");
         const topRatedH3 = document.createElement("h3");
-        topRatedDiv.addEventListener("click", () => gamePickHandler(game.id));
+        topRatedDiv.addEventListener("click", () =>{ gamePickHandler(game.id); newGameId=game.id});
         topRatedDiv.classList.add("itemContainer");
         topRatedImg.setAttribute("src", game.background_image);
         topRatedImg.setAttribute("alt", game.name);
@@ -148,8 +151,9 @@ function App() {
       console.error("Error fetching trending games:", error);
     }
   }
-  
+
   async function getGameDescription(id) {
+    console.log(id)
     try {
       const res = await fetch(
         `https://api.rawg.io/api/games/${id}?key=${API_KEY}`
@@ -502,7 +506,8 @@ function App() {
         </ul>
         <button className="more-btn">More</button>
       </section>
-      <section className="gameDescription hidden"
+      <section
+        className="gameDescription hidden"
         ref={gameDescriptionRef}
       ></section>
 
