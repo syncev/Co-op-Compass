@@ -1,9 +1,9 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import logo from "./assets/logo.png";
 import reset from "./assets/reset.png";
 import API_KEY from "./secrets.js";
 function App() {
-  console.log(API_KEY);
+  var homePage = true;
 
   const headerArrowRef = useRef(null);
   const headerRef = useRef(null);
@@ -23,51 +23,61 @@ function App() {
     categoriesRef.current.classList.remove("hidden");
     genericListRef.current.classList.add("hidden");
   }
-  const handleBack = () => {
-    hideMost();
-  };
+  function genericListBackHandle() {
+    homePage = true;
 
-  function genericListView() {
-    genericListRef.current.classList.remove("hidden");
-    headerArrowRef.current.classList.remove("hidden");
-    topRatedRef.current.classList.add("hidden");
-    categoriesRef.current.classList.add("hidden");
+    hideMost();
   }
 
-  const searchBtnHandler = (event) => {
+  function genericListView() {
+    topRatedRef.current.classList.add("hidden");
+    categoriesRef.current.classList.add("hidden");
+    headerArrowRef.current.classList.remove("hidden");
+    genericListRef.current.classList.remove("hidden");
+  }
+
+  function searchBtnHandler(event) {
     event.preventDefault();
     genericListView();
-  };
-  const topRatedBtnHandler = () => {
+    homePage = false;
+  }
+  function topRatedBtnHandler() {
+    homePage = false;
     genericListView();
-  };
+    getTrendingGamesPreview(40, ".genericList");
+  }
 
-  
-  const gamePickHandler = (id) => {
+  function gamePickHandler(id) {
     headerRef.current.classList.add("hidden");
+    headerArrowRef.current.classList.add("hidden");
+    filterPicker.current.classList.add("hidden");
+    genericListRef.current.classList.add("hidden");
     gameDescriptionRef.current.classList.remove("hidden");
     topRatedRef.current.classList.add("hidden");
     categoriesRef.current.classList.add("hidden");
     getGameDescription(id);
-  };
 
-  const gamePickBackHandler = () => {
-    while (gameDescriptionRef.current.firstChild) {
-      gameDescriptionRef.current.removeChild(
-        gameDescriptionRef.current.firstChild
-      );
-    headerRef.current.classList.remove("hidden");
+  }
+  function gameCardHide() {
     gameDescriptionRef.current.classList.add("hidden");
-    topRatedRef.current.classList.remove("hidden");
-    categoriesRef.current.classList.remove("hidden");
-
+  }
+  function gamePickBackHandler() {
+    if (!homePage) {
+      genericListRef.current.classList.remove("hidden");
+      headerArrowRef.current.classList.remove("hidden");
     }
-  };
+    if (homePage) {
+      hideMost();
+    }
+    gameCardHide();
+    headerRef.current.classList.remove("hidden");
+    return;
+  }
 
   function toggleFilter() {
     filterPicker.current.classList.toggle("hidden");
   }
-  const confirmFilter = () => {
+  function confirmFilter() {
     const genres = Array.from(
       genresRef.current.querySelectorAll("input[type='checkbox']")
     )
@@ -91,9 +101,12 @@ function App() {
       players,
     };
     toggleFilter();
-  };
+  }
 
-  async function getTrendingGamesPreview(page_size = 10) {
+  async function getTrendingGamesPreview(
+    page_size = 10,
+    querySelector = ".topRated-list"
+  ) {
     try {
       const res = await fetch(
         `https://api.rawg.io/api/games?key=${API_KEY}&page_size=${page_size}&tags=co-op&metacritic=95&ordering=-metacritic`
@@ -106,12 +119,13 @@ function App() {
 
       const data = await res.json();
       const topRated = data.results;
-      const topRatedList = document.querySelector(".topRated-list");
+      const topRatedList = document.querySelector(`${querySelector}`);
       topRated.forEach((game) => {
         const topRatedDiv = document.createElement("div");
         const topRatedImg = document.createElement("img");
         const topRatedH3 = document.createElement("h3");
         topRatedDiv.addEventListener("click", () => gamePickHandler(game.id));
+        topRatedDiv.classList.add("itemContainer");
         topRatedImg.setAttribute("src", game.background_image);
         topRatedImg.setAttribute("alt", game.name);
         topRatedH3.textContent = game.name;
@@ -141,7 +155,7 @@ function App() {
 
       //game card back arrow
       const gameCardArrow = document.createElement("span");
-      gameCardArrow.className="gameCard-arrow";
+      gameCardArrow.className = "gameCard-arrow";
       gameCardArrow.addEventListener("click", gamePickBackHandler);
       gameCardArrow.setAttribute("ref", "gameCardArrowRef");
       gameCardArrow.textContent = "<";
@@ -149,82 +163,83 @@ function App() {
 
       //game cover
       const gameCoverDiv = document.createElement("div");
-      gameCoverDiv.className="gameCover";
+      gameCoverDiv.className = "gameCover";
       gameCoverDiv.style.backgroundImage = `url(${gameContent.background_image})`;
       gameDescriptionRef.current.appendChild(gameCoverDiv);
 
       //game card starts
       const gameCard = document.createElement("div");
-      gameCard.className="gameCard";
+      gameCard.className = "gameCard";
       gameDescriptionRef.current.appendChild(gameCard);
 
       //game info starts
       const gameInfo = document.createElement("div");
-      gameInfo.className="gameCard-info";
+      gameInfo.className = "gameCard-info";
       gameCard.appendChild(gameInfo);
 
       //game title wrapper starts
       const gameCardTitleWrapper = document.createElement("div");
-      gameCardTitleWrapper.className="gameCard-title-wrapper";
+      gameCardTitleWrapper.className = "gameCard-title-wrapper";
       gameInfo.appendChild(gameCardTitleWrapper);
 
       //game title
       const gameTitle = document.createElement("h2");
-      gameTitle.className="gameTitle";
+      gameTitle.className = "gameTitle";
       gameTitle.textContent = gameContent.name;
       gameCardTitleWrapper.appendChild(gameTitle);
 
       //game rating
       const gameCardRating = document.createElement("div");
-      gameCardRating.className="gameCard-rating";
+      gameCardRating.className = "gameCard-rating";
       gameCardTitleWrapper.appendChild(gameCardRating);
 
       //game rating star
       const gameCardRatingStar = document.createElement("span");
-      gameCardRatingStar.className="gameCard-rating-star";
+      gameCardRatingStar.className = "gameCard-rating-star";
       gameCardRating.appendChild(gameCardRatingStar);
 
       //game rating icon
       const gameCardStar = document.createElement("i");
-      gameCardStar.className="fa-solid fa-star";
+      gameCardStar.className = "fa-solid fa-star";
       gameCardRatingStar.appendChild(gameCardStar);
 
       //game rating number
       const gameCardRatingNumber = document.createElement("span");
-      gameCardRatingNumber.className="gameCard-rating-number regularText";
-      gameCardRatingNumber.textContent = data.rating.toFixed(1);;
+      gameCardRatingNumber.className = "gameCard-rating-number regularText";
+      gameCardRatingNumber.textContent = data.rating.toFixed(1);
       gameCardRating.appendChild(gameCardRatingNumber);
       //game title wrapper finishes
 
       //game card description wrapper starts
       const gameCardDescriptionWrapper = document.createElement("div");
-      gameCardDescriptionWrapper.className="gameCard-description-wrapper";
+      gameCardDescriptionWrapper.className = "gameCard-description-wrapper";
       gameInfo.appendChild(gameCardDescriptionWrapper);
 
       //game card description
       const gameCardDescription = document.createElement("p");
-      gameCardDescription.className="gameCard-description regularText";
+      gameCardDescription.className = "gameCard-description regularText";
       gameCardDescription.innerHTML = gameContent.description;
       gameCardDescriptionWrapper.appendChild(gameCardDescription);
       //game card description wrapper finishes
 
       //game card screenshots wrapper starts
       const gameCardScreenshotsWrapper = document.createElement("div");
-      gameCardScreenshotsWrapper.className="gameCard-screenshots-wrapper";
+      gameCardScreenshotsWrapper.className = "gameCard-screenshots-wrapper";
       gameInfo.appendChild(gameCardScreenshotsWrapper);
 
       //game card screenshots title
       const gameCardScreenshotsTitle = document.createElement("h3");
-      gameCardScreenshotsTitle.className="gameCard-screenshots-title regularText";
+      gameCardScreenshotsTitle.className =
+        "gameCard-screenshots-title regularText";
       gameCardScreenshotsTitle.textContent = "Screenshots";
       gameCardScreenshotsWrapper.appendChild(gameCardScreenshotsTitle);
 
       //game card screenshots
       const gameCardScreenshotsList = document.createElement("div");
-      gameCardScreenshotsList.className="gameCard-screenshots-list";
+      gameCardScreenshotsList.className = "gameCard-screenshots-list";
       gameCardScreenshotsWrapper.appendChild(gameCardScreenshotsList);
 
-        //fetch and display screenshots
+      //fetch and display screenshots
       async function getGameScreenshots(id) {
         const res = await fetch(
           `https://api.rawg.io/api/games/${id}/screenshots?key=${API_KEY}`
@@ -232,7 +247,7 @@ function App() {
         const data = await res.json();
         data.results.forEach((screenshot) => {
           const gameCardScreenshot = document.createElement("div");
-          gameCardScreenshot.className="gameCard-screenshots";
+          gameCardScreenshot.className = "gameCard-screenshots";
 
           const gameCardScreenshotImg = document.createElement("img");
           gameCardScreenshotImg.src = screenshot.image;
@@ -253,7 +268,7 @@ function App() {
     <div className="appContainer">
       <span
         className="header-arrow hidden"
-        onClick={handleBack}
+        onClick={genericListBackHandle}
         ref={headerArrowRef}
       >
         &lt;
@@ -411,7 +426,7 @@ function App() {
         </div>
 
         <div className="genericList">
-          <div className="itemContainer" onClick={gamePickHandler}>
+          {/* <div className="itemContainer" onClick={gamePickHandler}>
             <img src="./src/assets/hogwarts-legacy.png" alt="" />
             <h3 className="gameTitle">DRAGON BALL: Sparking!</h3>
           </div>
@@ -445,7 +460,7 @@ function App() {
           <div className="itemContainer">
             <img src="./src/assets/hogwarts-legacy.png" alt="" />
             <h3 className="gameTitle">Game Title</h3>
-          </div>
+          </div> */}
         </div>
       </section>
       <section className="categories " ref={categoriesRef}>
@@ -474,9 +489,10 @@ function App() {
         </ul>
         <button className="more-btn">More</button>
       </section>
-      <section className="gameDescription hidden" ref={gameDescriptionRef}>
-       
-      </section>
+      <section
+        className="gameDescription hidden"
+        ref={gameDescriptionRef}
+      ></section>
 
       <footer>
         <p className="footer-text">Co-Op Compass - 2024</p>
