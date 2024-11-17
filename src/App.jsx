@@ -17,7 +17,7 @@ function App() {
   const playersRef = useRef(null);
   const genresRef = useRef(null);
 
-  function hideMost() {
+  function showHome() {
     headerArrowRef.current.classList.add("hidden");
     topRatedRef.current.classList.remove("hidden");
     categoriesRef.current.classList.remove("hidden");
@@ -26,10 +26,10 @@ function App() {
   function genericListBackHandle() {
     homePage = true;
 
-    hideMost();
+    showHome();
   }
 
-  function genericListView() {
+  function showList() {
     topRatedRef.current.classList.add("hidden");
     categoriesRef.current.classList.add("hidden");
     headerArrowRef.current.classList.remove("hidden");
@@ -38,16 +38,16 @@ function App() {
 
   function searchBtnHandler(event) {
     event.preventDefault();
-    genericListView();
+    showList();
     homePage = false;
   }
   function topRatedBtnHandler() {
     homePage = false;
-    genericListView();
+    showList();
     getTrendingGamesPreview(40, ".genericList");
   }
 
-  function gamePickHandler(id) {
+  function showGameCard(){
     headerRef.current.classList.add("hidden");
     headerArrowRef.current.classList.add("hidden");
     filterPicker.current.classList.add("hidden");
@@ -55,19 +55,29 @@ function App() {
     gameDescriptionRef.current.classList.remove("hidden");
     topRatedRef.current.classList.add("hidden");
     categoriesRef.current.classList.add("hidden");
+  }
+  function gamePickHandler(id) {
+    showGameCard();
+    const gameCard = document.querySelector(".gameDescription");
+    if(!gameCard.children){
     getGameDescription(id);
-
+    } else if (gameCard.children){
+      while (gameCard.firstChild) {
+        gameCard.removeChild(gameCard.firstChild);
+      }
+      getGameDescription(id);
+    }
   }
   function gameCardHide() {
     gameDescriptionRef.current.classList.add("hidden");
   }
-  function gamePickBackHandler() {
+  function gameCardBackHandler() {
     if (!homePage) {
       genericListRef.current.classList.remove("hidden");
       headerArrowRef.current.classList.remove("hidden");
     }
     if (homePage) {
-      hideMost();
+      showHome();
     }
     gameCardHide();
     headerRef.current.classList.remove("hidden");
@@ -138,7 +148,7 @@ function App() {
       console.error("Error fetching trending games:", error);
     }
   }
-  getTrendingGamesPreview();
+  
   async function getGameDescription(id) {
     try {
       const res = await fetch(
@@ -156,7 +166,7 @@ function App() {
       //game card back arrow
       const gameCardArrow = document.createElement("span");
       gameCardArrow.className = "gameCard-arrow";
-      gameCardArrow.addEventListener("click", gamePickBackHandler);
+      gameCardArrow.addEventListener("click", gameCardBackHandler);
       gameCardArrow.setAttribute("ref", "gameCardArrowRef");
       gameCardArrow.textContent = "<";
       gameDescriptionRef.current.appendChild(gameCardArrow);
@@ -264,6 +274,9 @@ function App() {
       console.error("Error fetching game description:", error);
     }
   }
+
+  getTrendingGamesPreview();
+
   return (
     <div className="appContainer">
       <span
@@ -489,8 +502,7 @@ function App() {
         </ul>
         <button className="more-btn">More</button>
       </section>
-      <section
-        className="gameDescription hidden"
+      <section className="gameDescription hidden"
         ref={gameDescriptionRef}
       ></section>
 
