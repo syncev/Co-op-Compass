@@ -3,9 +3,13 @@ import logo from "./assets/logo.png";
 import reset from "./assets/reset.png";
 import API_KEY from "./secrets.js";
 function App() {
+  const [searchContent, setSearchContent] = useState("");
+  useEffect(() => {
+    getGamesList();
+  }, []);
   var homePage = true;
   var currentGameId;
-  var newGameId;
+  var currentSearchQuery;
 
   const headerArrowRef = useRef(null);
   const headerRef = useRef(null);
@@ -13,17 +17,22 @@ function App() {
   const categoriesRef = useRef(null);
   const gameDescriptionRef = useRef(null);
   const gameCardArrowRef = useRef(null);
+  const genericListWrapperRef = useRef(null);
   const genericListRef = useRef(null);
   const filterPicker = useRef(null);
   const consolesRef = useRef(null);
   const playersRef = useRef(null);
   const genresRef = useRef(null);
 
+  function searchInputChange(e) {
+    setSearchContent(e.target.value);
+  }
+
   function showHome() {
     headerArrowRef.current.classList.add("hidden");
     topRatedRef.current.classList.remove("hidden");
     categoriesRef.current.classList.remove("hidden");
-    genericListRef.current.classList.add("hidden");
+    genericListWrapperRef.current.classList.add("hidden");
   }
   function genericListBackHandle() {
     homePage = true;
@@ -35,25 +44,47 @@ function App() {
     topRatedRef.current.classList.add("hidden");
     categoriesRef.current.classList.add("hidden");
     headerArrowRef.current.classList.remove("hidden");
-    genericListRef.current.classList.remove("hidden");
+    genericListWrapperRef.current.classList.remove("hidden");
   }
 
+  function oldListRemover(){
+    if (genericListRef.current.children) {
+    while (genericListRef.current.firstChild) {
+      genericListRef.current.removeChild(genericListRef.current.firstChild);
+    }
+      
+    }
+  }
   function searchBtnHandler(event) {
     event.preventDefault();
-    showList();
     homePage = false;
+    const searchQueryContent = `&search=${searchContent}`;
+    if (currentSearchQuery === searchContent) {
+      showList();
+    }
+    if (
+      currentSearchQuery !== searchContent &&
+      searchContent !== "" &&
+      searchContent !== " "
+    ) {
+      oldListRemover()
+      getGamesList(40, ".genericList", searchQueryContent);
+      currentSearchQuery = searchContent;
+      showList()
+    }
   }
   function topRatedBtnHandler() {
     homePage = false;
+
     showList();
-    getTrendingGamesPreview(40, ".genericList");
+    getGamesList(40, ".genericList");
   }
 
   function showGameCard() {
     headerRef.current.classList.add("hidden");
     headerArrowRef.current.classList.add("hidden");
     filterPicker.current.classList.add("hidden");
-    genericListRef.current.classList.add("hidden");
+    genericListWrapperRef.current.classList.add("hidden");
     gameDescriptionRef.current.classList.remove("hidden");
     topRatedRef.current.classList.add("hidden");
     categoriesRef.current.classList.add("hidden");
@@ -63,11 +94,11 @@ function App() {
     if (!gameCard.children) {
       getGameDescription(id);
     } else if (gameCard.children && currentGameId !== id) {
-      while (gameCard.firstChild ) {
+      while (gameCard.firstChild) {
         gameCard.removeChild(gameCard.firstChild);
       }
       getGameDescription(id);
-    } 
+    }
     showGameCard();
     currentGameId = id;
   }
@@ -76,7 +107,7 @@ function App() {
   }
   function gameCardBackHandler() {
     if (!homePage) {
-      genericListRef.current.classList.remove("hidden");
+      genericListWrapperRef.current.classList.remove("hidden");
       headerArrowRef.current.classList.remove("hidden");
     }
     if (homePage) {
@@ -116,13 +147,14 @@ function App() {
     toggleFilter();
   }
 
-  async function getTrendingGamesPreview(
+  async function getGamesList(
     page_size = 10,
-    querySelector = ".topRated-list"
+    querySelector = ".topRated-list",
+    searcPrmtr = "metacritic=95&ordering=-metacritic"
   ) {
     try {
       const res = await fetch(
-        `https://api.rawg.io/api/games?key=${API_KEY}&page_size=${page_size}&tags=co-op&metacritic=95&ordering=-metacritic`
+        `https://api.rawg.io/api/games?key=${API_KEY}&page_size=${page_size}&tags=co-op&${searcPrmtr}`
       );
       if (!res.ok) {
         throw new Error(
@@ -131,21 +163,24 @@ function App() {
       }
 
       const data = await res.json();
-      const topRated = data.results;
-      const topRatedList = document.querySelector(`${querySelector}`);
-      topRated.forEach((game) => {
-        const topRatedDiv = document.createElement("div");
-        const topRatedImg = document.createElement("img");
-        const topRatedH3 = document.createElement("h3");
-        topRatedDiv.addEventListener("click", () =>{ gamePickHandler(game.id); newGameId=game.id});
-        topRatedDiv.classList.add("itemContainer");
-        topRatedImg.setAttribute("src", game.background_image);
-        topRatedImg.setAttribute("alt", game.name);
-        topRatedH3.textContent = game.name;
-        topRatedH3.classList.add("gameTitle");
-        topRatedDiv.appendChild(topRatedH3);
-        topRatedDiv.appendChild(topRatedImg);
-        topRatedList.appendChild(topRatedDiv);
+      const gamesListData = data.results;
+      const querySelectedElement = document.querySelector(`${querySelector}`);
+      gamesListData.forEach((game) => {
+        const gamesListDiv = document.createElement("div");
+        const gamesListImg = document.createElement("img");
+        const gamesListH3 = document.createElement("h3");
+        gamesListDiv.addEventListener("click", () => {
+          gamePickHandler(game.id);
+          newGameId = game.id;
+        });
+        gamesListDiv.classList.add("itemContainer");
+        gamesListImg.setAttribute("src", game.background_image);
+        gamesListImg.setAttribute("alt", game.name);
+        gamesListH3.textContent = game.name;
+        gamesListH3.classList.add("gameTitle");
+        gamesListDiv.appendChild(gamesListH3);
+        gamesListDiv.appendChild(gamesListImg);
+        querySelectedElement.appendChild(gamesListDiv);
       });
     } catch (error) {
       console.error("Error fetching trending games:", error);
@@ -153,7 +188,7 @@ function App() {
   }
 
   async function getGameDescription(id) {
-    console.log(id)
+    console.log(id);
     try {
       const res = await fetch(
         `https://api.rawg.io/api/games/${id}?key=${API_KEY}`
@@ -279,8 +314,6 @@ function App() {
     }
   }
 
-  getTrendingGamesPreview();
-
   return (
     <div className="appContainer">
       <span
@@ -299,7 +332,14 @@ function App() {
         </div>
         <div className="search-wrapper">
           <form id="searchForm">
-            <input type="text" placeholder="game title.." name="" id="" />
+            <input
+              type="text"
+              placeholder="game title.."
+              name=""
+              id=""
+              value={searchContent}
+              onChange={searchInputChange}
+            />
             <button className="searchBtn" onClick={searchBtnHandler}>
               <img src="./src/assets/search.png" alt="" />
             </button>
@@ -320,7 +360,7 @@ function App() {
 
         <article className="topRated-list "></article>
       </section>
-      <section className="genericList-wrapper hidden" ref={genericListRef}>
+      <section className="genericList-wrapper hidden" ref={genericListWrapperRef}>
         <div className="genericList-filter">
           <button className="filterBtn-wrapper" onClick={toggleFilter}>
             <img className="filterImg" src="./src/assets/filter.png" alt="" />
@@ -441,44 +481,7 @@ function App() {
             </div>
           </div>
         </div>
-
-        <div className="genericList">
-          {/* <div className="itemContainer" onClick={gamePickHandler}>
-            <img src="./src/assets/hogwarts-legacy.png" alt="" />
-            <h3 className="gameTitle">DRAGON BALL: Sparking!</h3>
-          </div>
-
-          <div className="itemContainer" onClick={gamePickHandler}>
-            <img src="./src/assets/hogwarts-legacy.png" alt="" />
-            <h3 className="gameTitle">Lords of the Fallen</h3>
-          </div>
-
-          <div className="itemContainer" onClick={gamePickHandler}>
-            <img src="./src/assets/hogwarts-legacy.png" alt="" />
-            <h3 className="gameTitle">Baldurs Gate</h3>
-          </div>
-
-          <div className="itemContainer">
-            <img src="./src/assets/hogwarts-legacy.png" alt="" />
-            <h3 className="gameTitle">Hogwarts Legacy</h3>
-          </div>
-
-          <div className="itemContainer">
-            <img src="./src/assets/hogwarts-legacy.png" alt="" />
-            <h3 className="gameTitle">
-              NARUTO X BORUTO Ultimate Ninja STORM CONNECTIONS
-            </h3>
-          </div>
-
-          <div className="itemContainer">
-            <img src="./src/assets/hogwarts-legacy.png" alt="" />
-            <h3 className="gameTitle">Game Title</h3>
-          </div>
-          <div className="itemContainer">
-            <img src="./src/assets/hogwarts-legacy.png" alt="" />
-            <h3 className="gameTitle">Game Title</h3>
-          </div> */}
-        </div>
+        <div className="genericList" ref={genericListRef}></div>
       </section>
       <section className="categories " ref={categoriesRef}>
         <div className="categories-header">
