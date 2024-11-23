@@ -47,12 +47,11 @@ function App() {
     genericListWrapperRef.current.classList.remove("hidden");
   }
 
-  function oldListRemover(){
+  function oldListRemover() {
     if (genericListRef.current.children) {
-    while (genericListRef.current.firstChild) {
-      genericListRef.current.removeChild(genericListRef.current.firstChild);
-    }
-      
+      while (genericListRef.current.firstChild) {
+        genericListRef.current.removeChild(genericListRef.current.firstChild);
+      }
     }
   }
   function searchBtnHandler(event) {
@@ -67,10 +66,10 @@ function App() {
       searchContent !== "" &&
       searchContent !== " "
     ) {
-      oldListRemover()
+      oldListRemover();
       getGamesList(40, ".genericList", searchQueryContent);
       currentSearchQuery = searchContent;
-      showList()
+      showList();
     }
   }
   function topRatedBtnHandler() {
@@ -171,7 +170,6 @@ function App() {
         const gamesListH3 = document.createElement("h3");
         gamesListDiv.addEventListener("click", () => {
           gamePickHandler(game.id);
-          newGameId = game.id;
         });
         gamesListDiv.classList.add("itemContainer");
         gamesListImg.setAttribute("src", game.background_image);
@@ -188,7 +186,6 @@ function App() {
   }
 
   async function getGameDescription(id) {
-    console.log(id);
     try {
       const res = await fetch(
         `https://api.rawg.io/api/games/${id}?key=${API_KEY}`
@@ -281,36 +278,50 @@ function App() {
       gameCardScreenshotsTitle.className =
         "gameCard-screenshots-title regularText";
       gameCardScreenshotsTitle.textContent = "Screenshots";
+
       gameCardScreenshotsWrapper.appendChild(gameCardScreenshotsTitle);
 
       //game card screenshots
       const gameCardScreenshotsList = document.createElement("div");
       gameCardScreenshotsList.className = "gameCard-screenshots-list";
+
       gameCardScreenshotsWrapper.appendChild(gameCardScreenshotsList);
 
       //fetch and display screenshots
-      async function getGameScreenshots(id) {
-        const res = await fetch(
-          `https://api.rawg.io/api/games/${id}/screenshots?key=${API_KEY}`
-        );
-        const data = await res.json();
-        data.results.forEach((screenshot) => {
-          const gameCardScreenshot = document.createElement("div");
-          gameCardScreenshot.className = "gameCard-screenshots";
 
-          const gameCardScreenshotImg = document.createElement("img");
-          gameCardScreenshotImg.src = screenshot.image;
-          gameCardScreenshot.alt = screenshot.image;
-
-          gameCardScreenshot.appendChild(gameCardScreenshotImg);
-          gameCardScreenshotsList.appendChild(gameCardScreenshot);
-        });
-      }
-      getGameScreenshots(id);
+      getGameScreenshots(id, gameCardScreenshotsList);
       // game card screenshots wrapper finishes
       //     game info finishes
     } catch (error) {
       console.error("Error fetching game description:", error);
+    }
+    function enlargeImage() {
+      const enlargedChildren = document.querySelector(".enlarged");
+      if(enlargedChildren && enlargedChildren !== this){
+        enlargedChildren.classList.remove("enlarged");
+        }
+        this.classList.toggle("enlarged");
+    }
+
+    async function getGameScreenshots(id, gameCardScreenshotsList) {
+      const res = await fetch(
+        `https://api.rawg.io/api/games/${id}/screenshots?key=${API_KEY}`
+      );
+      const data = await res.json();
+      data.results.forEach((screenshot) => {
+        const gameCardScreenshot = document.createElement("div");
+        gameCardScreenshot.className = "gameCard-screenshots";
+
+        const gameCardScreenshotImg = document.createElement("img");
+        gameCardScreenshotImg.src = screenshot.image;
+        gameCardScreenshotImg.alt = screenshot.image;
+        gameCardScreenshotImg.onclick = function () {
+          enlargeImage.call(this);
+        };
+
+        gameCardScreenshot.appendChild(gameCardScreenshotImg);
+        gameCardScreenshotsList.appendChild(gameCardScreenshot);
+      });
     }
   }
 
@@ -360,7 +371,10 @@ function App() {
 
         <article className="topRated-list "></article>
       </section>
-      <section className="genericList-wrapper hidden" ref={genericListWrapperRef}>
+      <section
+        className="genericList-wrapper hidden"
+        ref={genericListWrapperRef}
+      >
         <div className="genericList-filter">
           <button className="filterBtn-wrapper" onClick={toggleFilter}>
             <img className="filterImg" src="./src/assets/filter.png" alt="" />

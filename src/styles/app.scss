@@ -429,10 +429,21 @@ body {
           align-items: center;
           padding-top: 20px;
           gap: 15px;
+          
           .gameCard-screenshots {
+            &:focus{
+              transform: scale(1.6);
+              
+            }
             img {
               width: 250px;
               border-radius: 15px;
+              &.enlarged{
+                transform: scale(1.6);
+                
+              }
+              transition: all 0.5s ease-in-out;
+
             }
           }
         }
