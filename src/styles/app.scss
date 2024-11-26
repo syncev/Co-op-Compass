@@ -170,6 +170,7 @@ body {
           font-family: "Cabinet Grotesk", sans-serif;
           font-weight: 600;
           font-size: 25px;
+          cursor: pointer;
         }
       }
       .filterPicker {
@@ -310,15 +311,7 @@ body {
       li {
         position: relative;
         display: flex;
-        &::before {
-          content: "";
-          width: 15px;
-          height: 15px;
-          background-color: $primaryBtn-color;
-          border-radius: 2px;
-          position: absolute;
-          left: -30px;
-        }
+      cursor: pointer;
       }
     }
     .more-btn {

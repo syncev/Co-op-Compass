@@ -155,11 +155,7 @@ function App() {
       const res = await fetch(
         `https://api.rawg.io/api/games?key=${API_KEY}&page_size=${page_size}&tags=co-op&${searcPrmtr}`
       );
-      if (!res.ok) {
-        throw new Error(
-          `Failed to fetch trending games: ${res.status} ${res.statusText}`
-        );
-      }
+     
 
       const data = await res.json();
       const gamesListData = data.results;
@@ -190,11 +186,7 @@ function App() {
       const res = await fetch(
         `https://api.rawg.io/api/games/${id}?key=${API_KEY}`
       );
-      if (!res.ok) {
-        throw new Error(
-          `Failed to fetch game description: ${res.status} ${res.statusText}`
-        );
-      }
+     
 
       const data = await res.json();
       const gameContent = data;
@@ -325,6 +317,34 @@ function App() {
     }
   }
 
+ 
+    
+    async function getGameCategoriesList(listID){
+    try {
+      const res = await fetch(
+        `https://api.rawg.io/api/${listID}?key=${API_KEY}&page_size=8`
+      );
+      const data = await res.json();
+      const gameCategoriesList = data.results;
+      gameCategoriesList.forEach((categorie) => {
+        const categoriesContainer = document.getElementById(`${listID}`);
+        const categoriesLI = document.createElement("li")
+        // categoriesLI.addEventListener("click", () => {
+          
+        // })
+        categoriesLI.innerHTML = categorie.name;
+        categoriesContainer.appendChild(categoriesLI);
+        
+        
+      })
+    }
+    catch (error) {
+      console.error("Error fetching game description:", error);
+    }
+  }
+  
+  getGameCategoriesList("genres")
+  getGameCategoriesList("platforms")
   return (
     <div className="appContainer">
       <span
@@ -499,27 +519,17 @@ function App() {
       </section>
       <section className="categories " ref={categoriesRef}>
         <div className="categories-header">
-          <h2 className="secondaryHeader">Categorias</h2>
+          <h2 className="secondaryHeader">Genre</h2>
         </div>
-        <ul className="categories-list">
-          <li>Accion</li>
-          <li>Aventura</li>
-          <li>Simulacion</li>
-          <li>Sandbox</li>
-          <li>Estrategia</li>
-          <li>Horror</li>
+        <ul className="categories-list " id="genres">
+          
         </ul>
         <button className="more-btn">More</button>
         <div className="categories-header">
-          <h2 className="secondaryHeader">Consolas</h2>
+          <h2 className="secondaryHeader">Platforms</h2>
         </div>
-        <ul className="categories-list">
-          <li>PC</li>
-          <li>Play 4</li>
-          <li>Play 5</li>
-          <li>Xbox</li>
-          <li>Xbox 1</li>
-          <li>Mobile</li>
+        <ul className="categories-list " id="platforms">
+          
         </ul>
         <button className="more-btn">More</button>
       </section>
