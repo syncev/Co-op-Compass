@@ -7,6 +7,8 @@ function App() {
   useEffect(() => {
     getGamesList();
   }, []);
+  let gameGenresList;
+  let gamePlatformsList;
   var homePage = true;
   var currentGameId;
   var currentSearchQuery;
@@ -322,29 +324,46 @@ function App() {
     async function getGameCategoriesList(listID){
     try {
       const res = await fetch(
-        `https://api.rawg.io/api/${listID}?key=${API_KEY}&page_size=8`
+        `https://api.rawg.io/api/${listID}?key=${API_KEY}&page_size=50`
       );
+      if (!res.ok) {
+        throw new Error(`API request failed with status: ${res.status}`);
+      }
       const data = await res.json();
-      const gameCategoriesList = data.results;
-      gameCategoriesList.forEach((categorie) => {
-        const categoriesContainer = document.getElementById(`${listID}`);
-        const categoriesLI = document.createElement("li")
-        // categoriesLI.addEventListener("click", () => {
-          
-        // })
-        categoriesLI.innerHTML = categorie.name;
-        categoriesContainer.appendChild(categoriesLI);
-        
-        
-      })
-    }
-    catch (error) {
+      if (listID === "genres") gameGenresList = data.results;
+      else if (listID === "platforms") gamePlatformsList = data.results;
+
+      return listID;
+      
+    } catch (error) {
       console.error("Error fetching game description:", error);
     }
   }
-  
-  getGameCategoriesList("genres")
-  getGameCategoriesList("platforms")
+
+  function firstCategoriesFiller(listID) {
+    const gameCategoriesList = listID === "genres" ? gameGenresList : gamePlatformsList;
+    const categoriesContainer = document.getElementById(listID);
+    gameCategoriesList.slice(0, 8).forEach((category) => {
+      const categoriesLI = document.createElement("li");
+      categoriesLI.innerHTML = category.name;
+      categoriesContainer.appendChild(categoriesLI);
+    });
+  }
+
+  function moreLoader(event){
+    const listID = event.target.id === "morePlatforms" ? "platforms" : "genres";
+    const gameCategoriesList = listID === "genres" ? gameGenresList : gamePlatformsList;
+    // const gameCategoriesList = listID === "genres" ? gameGenresList : gamePlatformsList;
+    const categoriesContainer = document.getElementById(listID);
+    gameCategoriesList.slice(8).forEach((category) => {
+      const categoriesLI = document.createElement("li");
+      categoriesLI.innerHTML = category.name;
+      categoriesContainer.appendChild(categoriesLI);
+    });
+  }
+  getGameCategoriesList("genres").then(firstCategoriesFiller);
+  getGameCategoriesList("platforms").then(firstCategoriesFiller);
+
   return (
     <div className="appContainer">
       <span
@@ -524,14 +543,14 @@ function App() {
         <ul className="categories-list " id="genres">
           
         </ul>
-        <button className="more-btn">More</button>
+        <button className="more-btn" id="moreGenres" onClick={moreLoader} >More</button>
         <div className="categories-header">
           <h2 className="secondaryHeader">Platforms</h2>
         </div>
         <ul className="categories-list " id="platforms">
           
         </ul>
-        <button className="more-btn">More</button>
+        <button className="more-btn" id="morePlatforms" onClick={moreLoader}>More</button>
       </section>
       <section
         className="gameDescription hidden"
