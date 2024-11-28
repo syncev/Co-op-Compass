@@ -351,15 +351,30 @@ function App() {
   }
 
   function moreLoader(event){
+    const expanded = event.target.innerHTML;
+    event.target.innerHTML = event.target.innerHTML === "More" ? "Less" : "More";
+    
     const listID = event.target.id === "morePlatforms" ? "platforms" : "genres";
     const gameCategoriesList = listID === "genres" ? gameGenresList : gamePlatformsList;
-    // const gameCategoriesList = listID === "genres" ? gameGenresList : gamePlatformsList;
     const categoriesContainer = document.getElementById(listID);
-    gameCategoriesList.slice(8).forEach((category) => {
-      const categoriesLI = document.createElement("li");
-      categoriesLI.innerHTML = category.name;
-      categoriesContainer.appendChild(categoriesLI);
-    });
+    
+    if(expanded === "More") {
+
+      gameCategoriesList.slice(8).forEach((category) => {
+        const categoriesLI = document.createElement("li");
+        categoriesLI.innerHTML = category.name;
+        categoriesContainer.appendChild(categoriesLI);
+      });
+      
+    };
+    if(expanded === "Less") {
+      while (categoriesContainer.children.length > 8 ) {
+        categoriesContainer.removeChild(categoriesContainer.lastChild);
+      }}
+    
+    
+    
+
   }
   getGameCategoriesList("genres").then(firstCategoriesFiller);
   getGameCategoriesList("platforms").then(firstCategoriesFiller);
