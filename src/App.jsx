@@ -391,17 +391,6 @@ function App() {
           categoryName
         );
   }
-  function platformsHandler(platformId, platformName) {
-    homePage = false;
-    oldListRemover();
-    showList();
-    getGamesList(
-      50,
-      ".genericList",
-      "platforms=" + platformId,
-      platformName
-    );
-}
   getGameCategoriesList("genres").then(firstCategoriesFiller);
   getGameCategoriesList("platforms").then(firstCategoriesFiller);
 
