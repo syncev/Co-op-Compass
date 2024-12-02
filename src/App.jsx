@@ -38,7 +38,7 @@ function App() {
   }
   function genericListBackHandle() {
     homePage = true;
-
+    
     showHome();
   }
 
@@ -50,6 +50,8 @@ function App() {
   }
 
   function oldListRemover() {
+    const genericListHeader = document.querySelector(".genericList-header");
+    genericListHeader.innerHTML = "";
     if (genericListRef.current.children) {
       while (genericListRef.current.firstChild) {
         genericListRef.current.removeChild(genericListRef.current.firstChild);
@@ -76,9 +78,9 @@ function App() {
   }
   function topRatedBtnHandler() {
     homePage = false;
-
+    oldListRemover();
     showList();
-    getGamesList(40, ".genericList");
+    getGamesList(40, ".genericList", undefined, "Top Rated");
   }
 
   function showGameCard() {
@@ -151,17 +153,19 @@ function App() {
   async function getGamesList(
     page_size = 10,
     querySelector = ".topRated-list",
-    searcPrmtr = "metacritic=95&ordering=-metacritic"
+    searcPrmtr = "metacritic=95&ordering=-metacritic",
+    categoryTitle = ""
   ) {
     try {
       const res = await fetch(
         `https://api.rawg.io/api/games?key=${API_KEY}&page_size=${page_size}&tags=co-op&${searcPrmtr}`
       );
-     
 
       const data = await res.json();
       const gamesListData = data.results;
       const querySelectedElement = document.querySelector(`${querySelector}`);
+      const listHeaderSelector = document.querySelector(".genericList-header");
+      listHeaderSelector.innerHTML = categoryTitle;
       gamesListData.forEach((game) => {
         const gamesListDiv = document.createElement("div");
         const gamesListImg = document.createElement("img");
@@ -188,7 +192,6 @@ function App() {
       const res = await fetch(
         `https://api.rawg.io/api/games/${id}?key=${API_KEY}`
       );
-     
 
       const data = await res.json();
       const gameContent = data;
@@ -291,10 +294,10 @@ function App() {
     }
     function enlargeImage() {
       const enlargedChildren = document.querySelector(".enlarged");
-      if(enlargedChildren && enlargedChildren !== this){
+      if (enlargedChildren && enlargedChildren !== this) {
         enlargedChildren.classList.remove("enlarged");
-        }
-        this.classList.toggle("enlarged");
+      }
+      this.classList.toggle("enlarged");
     }
 
     async function getGameScreenshots(id, gameCardScreenshotsList) {
@@ -319,9 +322,7 @@ function App() {
     }
   }
 
- 
-    
-    async function getGameCategoriesList(listID){
+  async function getGameCategoriesList(listID) {
     try {
       const res = await fetch(
         `https://api.rawg.io/api/${listID}?key=${API_KEY}&page_size=50`
@@ -334,48 +335,73 @@ function App() {
       else if (listID === "platforms") gamePlatformsList = data.results;
 
       return listID;
-      
     } catch (error) {
       console.error("Error fetching game description:", error);
     }
   }
 
   function firstCategoriesFiller(listID) {
-    const gameCategoriesList = listID === "genres" ? gameGenresList : gamePlatformsList;
+    const gameCategoriesList =
+      listID === "genres" ? gameGenresList : gamePlatformsList;
     const categoriesContainer = document.getElementById(listID);
     gameCategoriesList.slice(0, 8).forEach((category) => {
       const categoriesLI = document.createElement("li");
       categoriesLI.innerHTML = category.name;
+      categoriesLI.onclick = function (){
+        categoriesHandler(category.id, category.name, listID);
+      } ;
+
+      
       categoriesContainer.appendChild(categoriesLI);
     });
   }
 
-  function moreLoader(event){
+  function moreLoader(event) {
     const expanded = event.target.innerHTML;
-    event.target.innerHTML = event.target.innerHTML === "More" ? "Less" : "More";
-    
-    const listID = event.target.id === "morePlatforms" ? "platforms" : "genres";
-    const gameCategoriesList = listID === "genres" ? gameGenresList : gamePlatformsList;
-    const categoriesContainer = document.getElementById(listID);
-    
-    if(expanded === "More") {
+    event.target.innerHTML =
+      event.target.innerHTML === "More" ? "Less" : "More";
 
+    const listID = event.target.id === "morePlatforms" ? "platforms" : "genres";
+    const gameCategoriesList =
+      listID === "genres" ? gameGenresList : gamePlatformsList;
+    const categoriesContainer = document.getElementById(listID);
+
+    if (expanded === "More") {
       gameCategoriesList.slice(8).forEach((category) => {
         const categoriesLI = document.createElement("li");
         categoriesLI.innerHTML = category.name;
+        categoriesLI.onclick = categoriesHandler;
         categoriesContainer.appendChild(categoriesLI);
       });
-      
-    };
-    if(expanded === "Less") {
-      while (categoriesContainer.children.length > 8 ) {
+    }
+    if (expanded === "Less") {
+      while (categoriesContainer.children.length > 8) {
         categoriesContainer.removeChild(categoriesContainer.lastChild);
-      }}
-    
-    
-    
-
+      }
+    }
   }
+  function categoriesHandler(categoryId, categoryName, listID) {
+    homePage = false;
+        oldListRemover();
+        showList();
+        getGamesList(
+          50,
+          ".genericList",
+          `${listID}=` + categoryId,
+          categoryName
+        );
+  }
+  function platformsHandler(platformId, platformName) {
+    homePage = false;
+    oldListRemover();
+    showList();
+    getGamesList(
+      50,
+      ".genericList",
+      "platforms=" + platformId,
+      platformName
+    );
+}
   getGameCategoriesList("genres").then(firstCategoriesFiller);
   getGameCategoriesList("platforms").then(firstCategoriesFiller);
 
@@ -549,23 +575,24 @@ function App() {
             </div>
           </div>
         </div>
+        <div className="genericList-header primaryHeader"></div>
         <div className="genericList" ref={genericListRef}></div>
       </section>
       <section className="categories " ref={categoriesRef}>
         <div className="categories-header">
           <h2 className="secondaryHeader">Genre</h2>
         </div>
-        <ul className="categories-list " id="genres">
-          
-        </ul>
-        <button className="more-btn" id="moreGenres" onClick={moreLoader} >More</button>
+        <ul className="categories-list " id="genres"></ul>
+        <button className="more-btn" id="moreGenres" onClick={moreLoader}>
+          More
+        </button>
         <div className="categories-header">
           <h2 className="secondaryHeader">Platforms</h2>
         </div>
-        <ul className="categories-list " id="platforms">
-          
-        </ul>
-        <button className="more-btn" id="morePlatforms" onClick={moreLoader}>More</button>
+        <ul className="categories-list " id="platforms"></ul>
+        <button className="more-btn" id="morePlatforms" onClick={moreLoader}>
+          More
+        </button>
       </section>
       <section
         className="gameDescription hidden"
