@@ -6,13 +6,16 @@ function App() {
   const [searchContent, setSearchContent] = useState("");
   useEffect(() => {
     getGamesList();
+    getGameCategoriesList("genres").then(firstCategoriesFiller);
+    getGameCategoriesList("platforms").then(firstCategoriesFiller);
   }, []);
-  let gameGenresList;
-  let gamePlatformsList;
+  const gameGenresList = useRef([]);
+  const gamePlatformsList = useRef([]);
   var homePage = true;
   var currentGameId;
   var currentSearchQuery;
 
+  console.log(gameGenresList.current)
   const headerArrowRef = useRef(null);
   const headerRef = useRef(null);
   const topRatedRef = useRef(null);
@@ -331,8 +334,8 @@ function App() {
         throw new Error(`API request failed with status: ${res.status}`);
       }
       const data = await res.json();
-      if (listID === "genres") gameGenresList = data.results;
-      else if (listID === "platforms") gamePlatformsList = data.results;
+      if (listID === "genres") gameGenresList.current = data.results;
+      else if (listID === "platforms") gamePlatformsList.current = data.results;
 
       return listID;
     } catch (error) {
@@ -342,7 +345,7 @@ function App() {
 
   function firstCategoriesFiller(listID) {
     const gameCategoriesList =
-      listID === "genres" ? gameGenresList : gamePlatformsList;
+      listID === "genres" ? gameGenresList.current : gamePlatformsList.current;
     const categoriesContainer = document.getElementById(listID);
     gameCategoriesList.slice(0, 8).forEach((category) => {
       const categoriesLI = document.createElement("li");
@@ -363,7 +366,7 @@ function App() {
 
     const listID = event.target.id === "morePlatforms" ? "platforms" : "genres";
     const gameCategoriesList =
-      listID === "genres" ? gameGenresList : gamePlatformsList;
+      listID === "genres" ? gameGenresList.current : gamePlatformsList.current;
     const categoriesContainer = document.getElementById(listID);
 
     if (expanded === "More") {
@@ -391,8 +394,7 @@ function App() {
           categoryName
         );
   }
-  getGameCategoriesList("genres").then(firstCategoriesFiller);
-  getGameCategoriesList("platforms").then(firstCategoriesFiller);
+  
 
   return (
     <div className="appContainer">
