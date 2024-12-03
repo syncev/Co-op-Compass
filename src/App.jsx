@@ -591,6 +591,7 @@ function App() {
       <footer>
         <p className="footer-text">Co-Op Compass - 2024</p>
         <p className="footer-text">Made by Santiago Hernandez</p>
+        <p className="footer-text">API by RAWG</p>
       </footer>
     </div>
   );
