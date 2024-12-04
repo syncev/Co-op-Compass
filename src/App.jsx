@@ -15,13 +15,11 @@ function App() {
   var currentGameId;
   var currentSearchQuery;
 
-  console.log(gameGenresList.current)
   const headerArrowRef = useRef(null);
   const headerRef = useRef(null);
   const topRatedRef = useRef(null);
   const categoriesRef = useRef(null);
   const gameDescriptionRef = useRef(null);
-  const gameCardArrowRef = useRef(null);
   const genericListWrapperRef = useRef(null);
   const genericListRef = useRef(null);
   const filterPicker = useRef(null);
@@ -161,7 +159,7 @@ function App() {
   ) {
     try {
       const res = await fetch(
-        `https://api.rawg.io/api/games?key=${API_KEY}&page_size=${page_size}&tags=co-op&${searcPrmtr}`
+        `https://api.rawg.io/api/games?key=${API_KEY}&page_size=${page_size}&tags=co-op&${searcPrmtr}&ordering=-metacritic`
       );
 
       const data = await res.json();
@@ -252,9 +250,10 @@ function App() {
       //game rating number
       const gameCardRatingNumber = document.createElement("span");
       gameCardRatingNumber.className = "gameCard-rating-number regularText";
-      gameCardRatingNumber.textContent = data.rating.toFixed(1);
+      gameCardRatingNumber.textContent = data.metacritic;
       gameCardRating.appendChild(gameCardRatingNumber);
       //game title wrapper finishes
+      console.log(data)
 
       //game card description wrapper starts
       const gameCardDescriptionWrapper = document.createElement("div");
@@ -388,7 +387,7 @@ function App() {
         oldListRemover();
         showList();
         getGamesList(
-          50,
+          100,
           ".genericList",
           `${listID}=` + categoryId,
           categoryName
