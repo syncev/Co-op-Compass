@@ -26,7 +26,7 @@ function App() {
   const genericListWrapperRef = useRef(null);
   const genericListRef = useRef(null);
   const filterPicker = useRef(null);
-  const consolesRef = useRef(null);
+  const platformsRef = useRef(null);
   const playersRef = useRef(null);
   const genresRef = useRef(null);
   async function tags() {
@@ -38,8 +38,6 @@ function App() {
           throw new Error(`API request failed with status: ${res.status}`);
         }
       const data = await res.json();
-      const taglist = data.results;
-      console.log(taglist)
     } catch (error) {
       console.error("Error fetching game description:", error);
     }
@@ -176,34 +174,32 @@ function App() {
     const genresNameArray = genresArray.map((genre) => genre.name).join(", ");
       setSelectedGenres(genres);
 
-    const consoles = Array.from(
-      consolesRef.current.querySelectorAll("input[type='checkbox']")
-    )
-      .filter((input) => input.checked)
-      .map((input) => input.name);
+      const platformsArray = Array.from(platformsRef.current).filter((input) => input.checked)
+      const platformsIdArray = platformsArray.map((platform) => platform.id).join(",").toLowerCase();
+      const platformsNameArray = platformsArray.map((platform) => platform.name).join(", ");
 
-    const players = Array.from(
-      playersRef.current.querySelectorAll("input[type='checkbox']")
-    )
-      .filter((input) => input.checked)
-      .map((input) => input.name);
+    const playersArray = Array.from(playersRef.current).filter((input) => input.checked)
+    const playersIdArray = playersArray.map((player) => player.id).join(",").toLowerCase();
+    const playersNameArray = playersArray.map((player) => player.name).join(", ");
 
-      console.log(genresIdArray)
-      console.log(genresNameArray)
     toggleFilter();
     oldListRemover();
-    getGamesList(50, ".genericList", `genres=${genresIdArray}`, genresNameArray);
+
+    getGamesList(50, ".genericList", `genres=${genresIdArray}`, genresNameArray, "", `&platforms=${platformsIdArray}`, platformsNameArray ,platformsNameArray);
   }
   async function getGamesList(
     page_size = 20,
     querySelector = ".topRated-list",
     searcPrmtr = "",
     categoryTitle = "",
-    dates="dates=2015-01-01,2022-12-31"
+    dates="&dates=2015-01-01,2022-12-31",
+     platformsId= "",
+    platformsTitle = "",
+    playersCount = ""
   ) {
     try {
       const res = await fetch(
-        `https://api.rawg.io/api/games?key=${API_KEY}&page_size=${page_size}&${dates}&tags=co-op,multiplayer&${searcPrmtr}&ordering=-metacritic`
+        `https://api.rawg.io/api/games?key=${API_KEY}&page_size=${page_size}${dates}&tags=co-op,multiplayer&${searcPrmtr}${platformsId}&ordering=-metacritic`
       );
         if(!res.ok){
           throw new Error(`API request failed with status: ${res.status}`);
@@ -211,8 +207,10 @@ function App() {
       const data = await res.json();
       const gamesListData = data.results;
       const querySelectedElement = document.querySelector(`${querySelector}`);
-      const listHeaderSelector = document.querySelector(".genericList-header");
+      const listHeaderSelector = document.querySelector(".genreTitle");
       listHeaderSelector.innerHTML = categoryTitle;
+      const platformsHeaderSelector = document.querySelector(".platformsTitle");
+      platformsHeaderSelector.innerHTML = platformsTitle;
       gamesListData.forEach((game) => {
         const gamesListDiv = document.createElement("div");
         const gamesListImg = document.createElement("img");
@@ -514,7 +512,7 @@ function App() {
               </div>
               <div className="filterConsoles-wrapper">
                 <h3>Platforms</h3>
-                <form action="" ref={consolesRef} id="platformsForm">
+                <form action="" ref={platformsRef} id="platformsForm">
                  
                 </form>
               </div>
@@ -527,7 +525,9 @@ function App() {
             </div>
           </div>
         </div>
-        <div className="genericList-header primaryHeader"></div>
+        <div className="genericList-header genreTitle primaryHeader"></div>
+        <div className="genericList-header platformsTitle primaryHeader"></div>
+        <div className="genericList-header playersTitle primaryHeader"></div>
         <div className="genericList" ref={genericListRef}></div>
       </section>
       <section className="categories " ref={categoriesRef}>
