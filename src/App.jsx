@@ -13,7 +13,6 @@ function App() {
   }, []);
   const gameGenresList = useRef([]);
   const gamePlatformsList = useRef([]);
-  const gamePlayersCount = useRef([]);
   var homePage = true;
   var currentGameId;
   var currentSearchQuery;
@@ -27,7 +26,6 @@ function App() {
   const genericListRef = useRef(null);
   const filterPicker = useRef(null);
   const platformsRef = useRef(null);
-  const playersRef = useRef(null);
   const genresRef = useRef(null);
   async function tags() {
     try {
@@ -168,6 +166,9 @@ function App() {
     })
   
   }
+  function resetFilter(){
+
+  }
   function confirmFilter() {
     const genresArray = Array.from(genresRef.current).filter((input) => input.checked);
     const genresIdArray = genresArray.map((genre) => genre.id).join(",").toLowerCase();
@@ -178,10 +179,7 @@ function App() {
       const platformsIdArray = platformsArray.map((platform) => platform.id).join(",").toLowerCase();
       const platformsNameArray = platformsArray.map((platform) => platform.name).join(", ");
 
-    const playersArray = Array.from(playersRef.current).filter((input) => input.checked)
-    const playersIdArray = playersArray.map((player) => player.id).join(",").toLowerCase();
-    const playersNameArray = playersArray.map((player) => player.name).join(", ");
-
+    
     toggleFilter();
     oldListRemover();
 
@@ -195,7 +193,6 @@ function App() {
     dates="&dates=2015-01-01,2022-12-31",
      platformsId= "",
     platformsTitle = "",
-    playersCount = ""
   ) {
     try {
       const res = await fetch(
@@ -496,7 +493,7 @@ function App() {
           </button>
           <div className="filterPicker hidden" ref={filterPicker}>
             <div className="filterPicker-btn">
-              <button className="filterResetBtn">
+              <button className="filterResetBtn" onClick={resetFilter}>
                 <img src={reset} alt="" />
               </button>
               <button className="filterConfirmBtn" onClick={confirmFilter}>
@@ -516,18 +513,11 @@ function App() {
                  
                 </form>
               </div>
-              <div className="filterPlayers-wrapper" id="playersForm">
-                <h3>Players</h3>
-                <form action="" ref={playersRef}>
-                  
-                </form>
-              </div>
             </div>
           </div>
         </div>
         <div className="genericList-header genreTitle primaryHeader"></div>
         <div className="genericList-header platformsTitle primaryHeader"></div>
-        <div className="genericList-header playersTitle primaryHeader"></div>
         <div className="genericList" ref={genericListRef}></div>
       </section>
       <section className="categories " ref={categoriesRef}>
