@@ -4,13 +4,16 @@ import reset from "./assets/reset.png";
 import API_KEY from "./secrets.js";
 function App() {
   const [searchContent, setSearchContent] = useState("");
+  const [selectedGenres, setSelectedGenres] = useState([]);
+  const [selectedPlatforms, setSelectedPlatforms] = useState([]);
   useEffect(() => {
-    getGamesList();
+    getGamesList().then(filterFill);
     getGameCategoriesList("genres").then(firstCategoriesFiller);
     getGameCategoriesList("platforms").then(firstCategoriesFiller);
   }, []);
   const gameGenresList = useRef([]);
   const gamePlatformsList = useRef([]);
+  const gamePlayersCount = useRef([]);
   var homePage = true;
   var currentGameId;
   var currentSearchQuery;
@@ -26,6 +29,22 @@ function App() {
   const consolesRef = useRef(null);
   const playersRef = useRef(null);
   const genresRef = useRef(null);
+  async function tags() {
+    try {
+      const res = await fetch(
+        `https://api.rawg.io/api/tags?key=${API_KEY}`
+      );
+        if(!res.ok){
+          throw new Error(`API request failed with status: ${res.status}`);
+        }
+      const data = await res.json();
+      const taglist = data.results;
+      console.log(taglist)
+    } catch (error) {
+      console.error("Error fetching game description:", error);
+    }
+  };
+  tags()
 
   function searchInputChange(e) {
     setSearchContent(e.target.value);
@@ -81,7 +100,7 @@ function App() {
     homePage = false;
     oldListRemover();
     showList();
-    getGamesList(40, ".genericList", undefined, "Top Rated");
+    getGamesList(50, ".genericList", undefined, "Top Rated");
   }
 
   function showGameCard() {
@@ -124,13 +143,38 @@ function App() {
 
   function toggleFilter() {
     filterPicker.current.classList.toggle("hidden");
+    
+  }
+  function filterFill(){
+    const formGenres = document.getElementById("genresForm");
+    gameGenresList.current.forEach((category) => {
+      const label = document.createElement("label");
+      const input =document.createElement("input");
+      input.setAttribute("type", "checkbox");
+      input.setAttribute("name", category.name);
+      input.setAttribute("id", category.id);
+      label.appendChild(input);
+      label.appendChild(document.createTextNode(category.name));
+      formGenres.appendChild(label);
+    })
+    const formPlatforms = document.getElementById("platformsForm");
+    gamePlatformsList.current.forEach((category) => {
+      const label = document.createElement("label");
+      const input =document.createElement("input");
+      input.setAttribute("type", "checkbox");
+      input.setAttribute("name", category.name);
+      input.setAttribute("id", category.id);
+      label.appendChild(input);
+      label.appendChild(document.createTextNode(category.name));
+      formPlatforms.appendChild(label);
+    })
+  
   }
   function confirmFilter() {
-    const genres = Array.from(
-      genresRef.current.querySelectorAll("input[type='checkbox']")
-    )
-      .filter((input) => input.checked)
-      .map((input) => input.name);
+    const genresArray = Array.from(genresRef.current).filter((input) => input.checked);
+    const genresIdArray = genresArray.map((genre) => genre.id).join(",").toLowerCase();
+    const genresNameArray = genresArray.map((genre) => genre.name).join(", ");
+      setSelectedGenres(genres);
 
     const consoles = Array.from(
       consolesRef.current.querySelectorAll("input[type='checkbox']")
@@ -143,25 +187,27 @@ function App() {
     )
       .filter((input) => input.checked)
       .map((input) => input.name);
-    const filterData = {
-      genres,
-      consoles,
-      players,
-    };
-    toggleFilter();
-  }
 
+      console.log(genresIdArray)
+      console.log(genresNameArray)
+    toggleFilter();
+    oldListRemover();
+    getGamesList(50, ".genericList", `genres=${genresIdArray}`, genresNameArray);
+  }
   async function getGamesList(
-    page_size = 10,
+    page_size = 20,
     querySelector = ".topRated-list",
-    searcPrmtr = "metacritic=95&ordering=-metacritic",
-    categoryTitle = ""
+    searcPrmtr = "",
+    categoryTitle = "",
+    dates="dates=2015-01-01,2022-12-31"
   ) {
     try {
       const res = await fetch(
-        `https://api.rawg.io/api/games?key=${API_KEY}&page_size=${page_size}&tags=co-op&${searcPrmtr}&ordering=-metacritic`
+        `https://api.rawg.io/api/games?key=${API_KEY}&page_size=${page_size}&${dates}&tags=co-op,multiplayer&${searcPrmtr}&ordering=-metacritic`
       );
-
+        if(!res.ok){
+          throw new Error(`API request failed with status: ${res.status}`);
+        }
       const data = await res.json();
       const gamesListData = data.results;
       const querySelectedElement = document.querySelector(`${querySelector}`);
@@ -372,7 +418,7 @@ function App() {
       gameCategoriesList.slice(8).forEach((category) => {
         const categoriesLI = document.createElement("li");
         categoriesLI.innerHTML = category.name;
-        categoriesLI.onclick = categoriesHandler;
+        categoriesLI.onclick = () =>categoriesHandler(category.id, category.name, listID);
         categoriesContainer.appendChild(categoriesLI);
       });
     }
@@ -462,104 +508,20 @@ function App() {
             <div className="filterPicker-categories">
               <div className="filterCategories-wrapper">
                 <h3>Categories</h3>
-                <form action="" ref={genresRef}>
-                  <label htmlFor="">
-                    <input type="checkbox" name="action" id="action" />
-                    Action
-                  </label>
-                  <label htmlFor="">
-                    <input type="checkbox" />
-                    Adventure
-                  </label>
-                  <label htmlFor="">
-                    <input type="checkbox" />
-                    RPG
-                  </label>
-                  <label htmlFor="">
-                    <input type="checkbox" />
-                    Horror
-                  </label>
-                  <label htmlFor="">
-                    <input type="checkbox" />
-                    Strategy
-                  </label>
-                  <label htmlFor="">
-                    <input type="checkbox" />
-                    Simulation
-                  </label>
-                  <label htmlFor="">
-                    <input type="checkbox" />
-                    Shooter
-                  </label>
+                <form action="" ref={genresRef }id="genresForm">
+                  
                 </form>
               </div>
               <div className="filterConsoles-wrapper">
-                <h3>Consoles</h3>
-                <form action="" ref={consolesRef}>
-                  <label htmlFor="">
-                    <input type="checkbox" />
-                    PC
-                  </label>
-                  <label htmlFor="">
-                    <input type="checkbox" />
-                    PlayStation 4
-                  </label>
-                  <label htmlFor="">
-                    <input type="checkbox" />
-                    PlayStation 5
-                  </label>
-                  <label htmlFor="">
-                    <input type="checkbox" />
-                    Wii
-                  </label>
-                  <label htmlFor="">
-                    <input type="checkbox" />
-                    Wii U
-                  </label>
-                  <label htmlFor="">
-                    <input type="checkbox" />
-                    Switch
-                  </label>
-                  <label htmlFor="">
-                    <input type="checkbox" />
-                    Xbox 360
-                  </label>
-                  <label htmlFor="">
-                    <input type="checkbox" />
-                    Xbox One
-                  </label>
-                  <label htmlFor="">
-                    <input type="checkbox" />
-                    Mobile
-                  </label>
+                <h3>Platforms</h3>
+                <form action="" ref={consolesRef} id="platformsForm">
+                 
                 </form>
               </div>
-              <div className="filterPlayers-wrapper">
+              <div className="filterPlayers-wrapper" id="playersForm">
                 <h3>Players</h3>
                 <form action="" ref={playersRef}>
-                  <label htmlFor="">
-                    <input type="checkbox" />2
-                  </label>
-                  <label htmlFor="">
-                    <input type="checkbox" />3
-                  </label>
-                  <label htmlFor="">
-                    <input type="checkbox" />4
-                  </label>
-                  <label htmlFor="">
-                    <input type="checkbox" />5
-                  </label>
-                  <label htmlFor="">
-                    <input type="checkbox" />6
-                  </label>
-                  <label htmlFor="">
-                    <input type="checkbox" />
-                    7-10
-                  </label>
-                  <label htmlFor="">
-                    <input type="checkbox" />
-                    10+
-                  </label>
+                  
                 </form>
               </div>
             </div>
