@@ -1,11 +1,9 @@
 import React, { useRef, useState, useEffect } from "react";
 import logo from "./assets/logo.png";
 import reset from "./assets/reset.png";
-import API_KEY from "./secrets.js";
+import LLAVE from "./secrets.js";
 function App() {
   const [searchContent, setSearchContent] = useState("");
-  const [selectedGenres, setSelectedGenres] = useState(``);
-  const [selectedPlatforms, setSelectedPlatforms] = useState(``);
   useEffect(() => {
     getGamesList().then(filterFill);
     getGameCategoriesList("genres").then(firstCategoriesFiller);
@@ -13,7 +11,6 @@ function App() {
   }, []);
   const gameGenresList = useRef([]);
   const gamePlatformsList = useRef([]);
-  const gamePlayersCount = useRef([]);
   var homePage = true;
   var currentGameId;
   var currentSearchQuery;
@@ -191,7 +188,7 @@ function resetFilter(){
   ) {
     try {
       const res = await fetch(
-        `https://api.rawg.io/api/games?key=${API_KEY}&tags=co-op,multiplayer&ordering=-metacritic&page_size=${page_size}${searcPrmtr}${dates}${platformsIdArray}`
+        `https://api.rawg.io/api/games?key=${LLAVE}&tags=co-op,multiplayer&ordering=-metacritic&page_size=${page_size}${searcPrmtr}${dates}${platformsIdArray}`
       );
         if(!res.ok){
           throw new Error(`API request failed with status: ${res.status}`);
@@ -227,7 +224,7 @@ function resetFilter(){
   async function getGameDescription(id) {
     try {
       const res = await fetch(
-        `https://api.rawg.io/api/games/${id}?key=${API_KEY}`
+        `https://api.rawg.io/api/games/${id}?key=${LLAVE}`
       );
 
       const data = await res.json();
@@ -339,7 +336,7 @@ function resetFilter(){
 
     async function getGameScreenshots(id, gameCardScreenshotsList) {
       const res = await fetch(
-        `https://api.rawg.io/api/games/${id}/screenshots?key=${API_KEY}`
+        `https://api.rawg.io/api/games/${id}/screenshots?key=${LLAVE}`
       );
       const data = await res.json();
       data.results.forEach((screenshot) => {
@@ -362,7 +359,7 @@ function resetFilter(){
   async function getGameCategoriesList(listID) {
     try {
       const res = await fetch(
-        `https://api.rawg.io/api/${listID}?key=${API_KEY}&page_size=50`
+        `https://api.rawg.io/api/${listID}?key=${LLAVE}&page_size=50`
       );
       if (!res.ok) {
         throw new Error(`API request failed with status: ${res.status}`);
