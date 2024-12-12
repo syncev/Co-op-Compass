@@ -1,1 +1,2 @@
-Practico de Curso API REST JS de PLATZI
+API REST Practice, a simple project for consuming API.
+https://syncev.github.io/Co-op-Compass/
