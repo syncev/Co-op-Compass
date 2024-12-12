@@ -4,8 +4,8 @@ import reset from "./assets/reset.png";
 import API_KEY from "./secrets.js";
 function App() {
   const [searchContent, setSearchContent] = useState("");
-  const [selectedGenres, setSelectedGenres] = useState([]);
-  const [selectedPlatforms, setSelectedPlatforms] = useState([]);
+  const [selectedGenres, setSelectedGenres] = useState(``);
+  const [selectedPlatforms, setSelectedPlatforms] = useState(``);
   useEffect(() => {
     getGamesList().then(filterFill);
     getGameCategoriesList("genres").then(firstCategoriesFiller);
@@ -13,6 +13,7 @@ function App() {
   }, []);
   const gameGenresList = useRef([]);
   const gamePlatformsList = useRef([]);
+  const gamePlayersCount = useRef([]);
   var homePage = true;
   var currentGameId;
   var currentSearchQuery;
@@ -26,21 +27,9 @@ function App() {
   const genericListRef = useRef(null);
   const filterPicker = useRef(null);
   const platformsRef = useRef(null);
+  const playersRef = useRef(null);
   const genresRef = useRef(null);
-  async function tags() {
-    try {
-      const res = await fetch(
-        `https://api.rawg.io/api/tags?key=${API_KEY}`
-      );
-        if(!res.ok){
-          throw new Error(`API request failed with status: ${res.status}`);
-        }
-      const data = await res.json();
-    } catch (error) {
-      console.error("Error fetching game description:", error);
-    }
-  };
-  tags()
+  
 
   function searchInputChange(e) {
     setSearchContent(e.target.value);
@@ -66,7 +55,7 @@ function App() {
   }
 
   function oldListRemover() {
-    const genericListHeader = document.querySelector(".genericList-header");
+    const genericListHeader = document.querySelectorAll(".genericList-header");
     genericListHeader.innerHTML = "";
     if (genericListRef.current.children) {
       while (genericListRef.current.firstChild) {
@@ -87,7 +76,7 @@ function App() {
       searchContent !== " "
     ) {
       oldListRemover();
-      getGamesList(40, ".genericList", searchQueryContent);
+      getGamesList(40, ".genericList", searchQueryContent,undefined,"");
       currentSearchQuery = searchContent;
       showList();
     }
@@ -166,24 +155,30 @@ function App() {
     })
   
   }
-  function resetFilter(){
+function resetFilter(){
+  genresRef.current.reset()
+  platformsRef.current.reset()
 
-  }
+}
   function confirmFilter() {
     const genresArray = Array.from(genresRef.current).filter((input) => input.checked);
-    const genresIdArray = genresArray.map((genre) => genre.id).join(",").toLowerCase();
+    var genresIdArray = ""
     const genresNameArray = genresArray.map((genre) => genre.name).join(", ");
-      setSelectedGenres(genres);
+    if (genresArray.length > 0) {
+      genresIdArray = `&genres=${genresArray.map((genre) => genre.id).join(",").toLowerCase()}`
+    }
 
       const platformsArray = Array.from(platformsRef.current).filter((input) => input.checked)
-      const platformsIdArray = platformsArray.map((platform) => platform.id).join(",").toLowerCase();
+      var platformsIdArray = "";
       const platformsNameArray = platformsArray.map((platform) => platform.name).join(", ");
+      if (platformsArray.length > 0) {
+        platformsIdArray = `&platforms=${platformsArray.map((platform) => platform.id).join(",").toLowerCase()}`
+      }
 
-    
     toggleFilter();
     oldListRemover();
 
-    getGamesList(50, ".genericList", `genres=${genresIdArray}`, genresNameArray, "", `&platforms=${platformsIdArray}`, platformsNameArray ,platformsNameArray);
+    getGamesList(50, ".genericList", genresIdArray, genresNameArray, "", platformsIdArray, platformsNameArray );
   }
   async function getGamesList(
     page_size = 20,
@@ -191,12 +186,12 @@ function App() {
     searcPrmtr = "",
     categoryTitle = "",
     dates="&dates=2015-01-01,2022-12-31",
-     platformsId= "",
+    platformsIdArray = "",
     platformsTitle = "",
   ) {
     try {
       const res = await fetch(
-        `https://api.rawg.io/api/games?key=${API_KEY}&page_size=${page_size}${dates}&tags=co-op,multiplayer&${searcPrmtr}${platformsId}&ordering=-metacritic`
+        `https://api.rawg.io/api/games?key=${API_KEY}&tags=co-op,multiplayer&ordering=-metacritic&page_size=${page_size}${searcPrmtr}${dates}${platformsIdArray}`
       );
         if(!res.ok){
           throw new Error(`API request failed with status: ${res.status}`);
@@ -294,7 +289,6 @@ function App() {
       gameCardRatingNumber.textContent = data.metacritic;
       gameCardRating.appendChild(gameCardRatingNumber);
       //game title wrapper finishes
-      console.log(data)
 
       //game card description wrapper starts
       const gameCardDescriptionWrapper = document.createElement("div");
@@ -430,8 +424,9 @@ function App() {
         getGamesList(
           100,
           ".genericList",
-          `${listID}=` + categoryId,
-          categoryName
+          `&${listID}=` + categoryId,
+          categoryName,
+          "",
         );
   }
   
@@ -511,6 +506,12 @@ function App() {
                 <h3>Platforms</h3>
                 <form action="" ref={platformsRef} id="platformsForm">
                  
+                </form>
+              </div>
+              <div className="filterPlayers-wrapper" id="playersForm">
+                <h3>Players</h3>
+                <form action="" ref={playersRef}>
+                  
                 </form>
               </div>
             </div>
