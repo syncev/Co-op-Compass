@@ -1,7 +1,7 @@
 {
   "name": "curso-api-rest-javascript-practico",
   "version": "1.0.0",
-  "homepage": "https://syncev.github.io/co-op-compass/",
+  "homepage": "https://syncev.github.io/co-op-compass",
   "description": "Practico de Curso API REST JS de PLATZI",
   "main": "index.html",
   "scripts": {
