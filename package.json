@@ -5,6 +5,8 @@
   "description": "Practico de Curso API REST JS de PLATZI",
   "main": "index.html",
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "vite --host",
     "build": "vite build"
@@ -19,6 +21,7 @@
     "vite": "^5.4.8"
   },
   "devDependencies": {
+    "gh-pages": "^6.2.0",
     "sass-embedded": "^1.79.4"
   }
 }
