@@ -1,0 +1,488 @@
+@import "../index.scss";
+
+.hidden {
+  display: none !important;
+}
+.hidden * {
+  display: none;
+}
+body {
+  box-sizing: border-box;
+  background-color: $primary-color;
+}
+
+.appContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  // background-color: $primary-color;
+  min-height: 100dvh;
+  .header-arrow {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+  }
+  header {
+    .logo-wrapper {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      img {
+        width: 100px;
+      }
+      h1 {
+        color: $primaryFont-color;
+      }
+    }
+    .search-wrapper {
+      width: 80dvw;
+      #searchForm {
+        margin-top: 30px;
+        padding: 2%;
+        border-radius: 7px;
+        width: inherit;
+        display: flex;
+        background-color: $secondary-color;
+        justify-content: space-between;
+        input {
+          background-color: transparent;
+          border: none;
+          color: $primaryFont-color;
+          font-size: 18px;
+          &:focus {
+            outline: none;
+          }
+        }
+        .searchBtn {
+          border: 0;
+          border-radius: 50%;
+          width: 30px;
+          height: 30px;
+          cursor: pointer;
+          img {
+            width: 15px;
+          }
+        }
+      }
+    }
+  }
+
+  .topRated {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: $secondary-color;
+    height: auto;
+    margin-top: 60px;
+    overflow: hidden;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+    .topRated-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 25px;
+      margin-top: 5px;
+      height: 60px;
+      h2 {
+        color: $primaryFont-color;
+      }
+    }
+
+    .topRated-list {
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      height: auto;
+      margin-top: 35px;
+      margin-bottom: 55px;
+      gap: 5dvw;
+      padding: 0 15px;
+      width: 100%;
+      overflow-x: scroll;
+
+      scroll-behavior: smooth;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      div {
+        flex: 0 0 auto;
+        width: 130px;
+        height: 170px;
+        overflow: hidden;
+        border-radius: 15px;
+        display: flex;
+        position: relative;
+        cursor: pointer;
+        img {
+          width: 100%;
+          height: auto;
+          object-fit: cover;
+        }
+        h3 {
+          position: absolute;
+          padding: 15px 10px;
+          align-self: center;
+          bottom: 0;
+          border-radius: 0 0 15px 15px;
+          background: linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0),
+            rgba(0, 0, 0, 0.6),
+            rgba(0, 0, 0, 0.6)
+          );
+          overflow: hidden;
+          height: auto;
+          width: 90%;
+          white-space: normal;
+          text-align: center;
+        }
+      }
+    }
+  }
+  .genericList-wrapper {
+    width: 100%;
+    .genericList-filter {
+      margin-top: 30px;
+      position: relative;
+      .filterBtn-wrapper {
+        gap: 5px;
+        border: 2px solid $primaryBtn-color;
+        background-color: $primaryBtn-color;
+        border-radius: 10px;
+        width: fit-content;
+        padding: 5px 10px;
+        margin-left: auto;
+        margin-right: auto;
+        border: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .filterImg {
+          height: 30px;
+          width: auto;
+        }
+        .filterBtn {
+          text-align: center;
+          font-family: "Cabinet Grotesk", sans-serif;
+          font-weight: 600;
+          font-size: 25px;
+          cursor: pointer;
+        }
+      }
+      .filterPicker {
+        width: 90%;
+        border: $filterFrame 1px solid;
+        position: absolute;
+        z-index: 500;
+        background-color: $primary-color;
+        left: 50%;
+        transform: translateX(-50%);
+        .filterPicker-btn {
+          display: flex;
+          gap: 50px;
+          justify-content: center;
+          margin: 15px;
+          .filterResetBtn {
+            background-color: $resetBtnColor;
+          }
+          .filterConfirmBtn {
+            background-color: $primaryBtn-color;
+            font-size: 22px;
+          }
+          .filterResetBtn,
+          .filterConfirmBtn {
+            padding: 5px 15px;
+            border-radius: 12px;
+            border: none;
+            width: 70px;
+            img {
+              width: 25px;
+              height: 25px;
+            }
+          }
+        }
+        .filterPicker-categories {
+          display: flex;
+          flex-direction: column;
+          div {
+            h3 {
+              font-size: 25px;
+              color: white;
+              padding-left: 15px;
+              padding-bottom: 20px;
+            }
+            form {
+              display: grid;
+              grid-template-columns: repeat(2, minmax(0, 1fr));
+              gap: 5px;
+              padding-bottom: 30px;
+              label {
+                padding-left: 30px;
+                color: white;
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                input {
+                  border: pink;
+                  background-color: none;
+                  accent-color: $primaryBtn-color;
+                  width: 20px;
+                  height: 20px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    .genericList-header {
+      text-align: center;
+      margin-top: 30px;
+      color: white;
+    }
+    .genericList {
+      width: 100%;
+      height: fit-content;
+      background-color: $secondary-color;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      row-gap: 40px;
+      padding: 30px 0;
+      margin-top: 30px;
+      .itemContainer {
+        justify-self: center;
+        width: 160px;
+        height: 200px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        position: relative;
+        cursor: pointer;
+        img {
+          border-radius: 15px;
+          width: auto;
+          height: 100%;
+          object-fit: cover;
+        }
+        h3 {
+          position: absolute;
+          padding: 15px 10px;
+          align-self: center;
+          bottom: 0;
+          border-radius: 0 0 15px 15px;
+          background: linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0),
+            rgba(0, 0, 0, 0.6),
+            rgba(0, 0, 0, 0.6)
+          );
+          overflow: hidden;
+          height: auto;
+          width: 90%;
+          white-space: normal;
+          text-align: center;
+        }
+      }
+    }
+  }
+  .categories {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    margin-top: 60px;
+    .categories-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 25px;
+      margin-top: 5px;
+      height: 60px;
+      h2 {
+        color: $primaryFont-color;
+      }
+    }
+    .categories-list {
+      padding-top: 20px;
+      padding-bottom: 20px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      padding-left: 80px;
+      li {
+        position: relative;
+        display: flex;
+      cursor: pointer;
+      }
+    }
+    .more-btn {
+      width: fit-content;
+      margin: 0 auto;
+      background-color: $primaryBtn-color;
+      border-radius: 8px;
+      padding: 5px 15px;
+      font-size: 18px;
+      font-family: "Cabinet Grotesk", sans-serif;
+      font-weight: 800;
+      cursor: pointer;
+      border: none;
+    }
+  }
+
+  .gameDescription {
+    .gameCard-arrow {
+      position: absolute;
+      top: 0px;
+      width: 100%;
+      height: 100px;
+      box-sizing: border-box;
+      padding-left: 15px;
+      padding-top: 15px;
+      color: white;
+      font-size: 50px;
+      cursor: pointer;
+      background: linear-gradient(
+            to top,
+            rgba(0, 0, 0, 0),
+            rgba(0, 0, 0, 0.6)
+          );
+    }
+    .gameCover {
+      height: 50dvh;
+      background-attachment: fixed;
+      background-position: center 0;
+      background-repeat: no-repeat;
+      background-size:  auto 50% ;
+      margin-top: -15px;
+      
+    }
+    .gameCard {
+      background-color: $primary-color;
+      padding: 30px 0;
+      margin-top: -50px;
+      border-radius: 30px 30px 0 0;
+      height: fit-content;
+      box-sizing: border-box;
+      width: 100%;
+      .gameCard-title-wrapper {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        gap: 15px;
+        padding: 0 15px;
+        
+        .gameTitle {
+          font-size: 30px;
+          text-align: center;
+        }
+        .gameCard-rating {
+          font-size: 30px;
+          color: white;
+          display: flex;
+          flex-direction: row;
+          gap: 5px;
+          align-items: center;
+          font-weight: 500;
+          .gameCard-rating-star {
+            color: gold;
+          }
+        }
+      }
+      .gameCard-genre-wrapper {
+        color: white;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        font-size: 18px;
+        padding-top: 30px;
+        font-weight: 600;
+      }
+      .gameCard-description-wrapper {
+        color: white;
+        padding-top: 30px;
+        font-weight: 400;
+        text-align: center;
+        margin: 0 auto;
+        width: 90%;
+      }
+      .gameCard-screenshots-wrapper {
+        display: flex;
+        flex-direction: column;
+        padding-top: 30px;
+        .gameCard-screenshots-title {
+          color: white;
+          font-size: 20px;
+          font-weight: 600;
+          padding-left: 30px;
+        }
+        .gameCard-screenshots-list {
+          display: flex;
+          flex-direction: inherit;
+          justify-content: center;
+          align-items: center;
+          padding-top: 20px;
+          gap: 15px;
+          
+          .gameCard-screenshots {
+            &:focus{
+              transform: scale(1.6);
+              
+            }
+            img {
+              width: 250px;
+              border-radius: 15px;
+              &.enlarged{
+                transform: scale(1.6);
+                
+              }
+              transition: all 0.5s ease-in-out;
+
+            }
+          }
+        }
+      }
+      // .similarGames-wrapper {
+      //   padding: 30px 0;
+      //   width: 100dvw;
+      //   overflow: hidden;
+      //   display: flex;
+      //   flex-direction: column;
+
+      //   .similarGames-title {
+      //     color: white;
+      //     font-weight: 600;
+      //     font-size: 20px;
+      //     padding-left: 30px;
+      //   }
+      //   .similarGames-list {
+      //     padding: 30px 20px 0px 20px;
+      //     display: flex;
+      //     flex-direction: row;
+      //     align-items: center;
+      //     gap: 10dvw;
+      //     overflow-x: scroll;
+      //     img {
+      //       width: 150px;
+      //       height: 150px;
+      //       object-fit: cover;
+      //       border-radius: 15px;
+      //     }
+      //   }
+      // }
+    }
+  }
+
+  footer {
+    padding: 15px 0;
+    background-color: $secondary-color;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+  }
+}

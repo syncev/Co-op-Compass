@@ -1,0 +1,63 @@
+$primary-color: #27203c;
+$secondary-color: #110B22;
+$complementary-color:#dca27e;
+$primaryBtn-color: #7EA9DC;
+$primaryFont-color: #dca27e;
+$gameTitleBgColor: #987777;
+$resetBtnColor: #DC7E7E;
+$filterFrame: #ffffff;
+$test: red 1px solid;
+
+.primaryHeader{
+    font-size: 36px;
+    font-weight: 600;
+    font-family: 'Clash Display', sans-serif;
+}
+
+.secondaryHeader{
+    font-size: 22px;
+    font-weight: 600;
+    font-family: 'Clash Display', sans-serif;
+
+}
+li{
+    font-size: 20px;
+    font-weight: 400;
+    font-family: 'Clash Display', sans-serif;
+    color: #FFFFFF;
+}
+
+.footer-text{
+    font-size: 12px;
+    font-weight: 200;
+    font-family: 'Cabinet Grotesk', sans-serif;
+    color: #FFFFFF;
+}
+
+
+.seeMore-btn{
+    background-color: $primaryBtn-color;
+    border-radius: 8px;
+    padding: 10px 15px;
+    border: none;
+    font-size: 18px;
+    font-family: 'Cabinet Grotesk', sans-serif;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  .gameTitle{
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Clash Display', sans-serif;
+    color:  $complementary-color ;
+  }
+  .filterConfirmBtn{
+    font-family: 'Clash Display', sans-serif;
+    font-weight: 500;
+  }
+  .filterPicker-categories h3, .filterPicker-categories form label{
+    font-family: 'Clash Display', sans-serif;
+  }
+  .regularText{
+    font-family: 'Clash Display', sans-serif;}
+  
