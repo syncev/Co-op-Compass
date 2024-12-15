@@ -1,6 +1,8 @@
 import React, { useRef, useState, useEffect } from "react";
 import logo from "./assets/logo.png";
 import reset from "./assets/reset.png";
+import searchImg from "./assets/search.png";
+import filterIcon from "./assets/filter.png";
 import LLAVE from "./secrets.js";
 function App() {
   const [searchContent, setSearchContent] = useState("");
@@ -483,7 +485,7 @@ function App() {
               onChange={searchInputChange}
             />
             <button className="searchBtn" onClick={searchBtnHandler}>
-              <img src="./src/assets/search.png" alt="" />
+              <img src={searchImg} alt="" />
             </button>
           </form>
         </div>
@@ -508,7 +510,7 @@ function App() {
       >
         <div className="genericList-filter">
           <button className="filterBtn-wrapper" onClick={toggleFilter}>
-            <img className="filterImg" src="./src/assets/filter.png" alt="" />
+            <img className="filterImg" src={filterIcon} alt="" />
             <span className="filterBtn">Filter</span>
           </button>
           <div className="filterPicker hidden" ref={filterPicker}>
