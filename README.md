@@ -1,5 +1,5 @@
 API REST Practice, a simple project for consuming API.
-https://syncev.github.io/Co-op-Compass/
+https://syncev.github.io/co-op-compass/
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
