@@ -254,6 +254,15 @@ body {
       row-gap: 40px;
       padding: 30px 0;
       margin-top: 30px;
+      .noResultsItemContainer{
+        display: flex;
+        
+        justify-content: center;
+        .noResultsSpan{
+          font-size: 30px;
+          color: $complementary-color;
+        }
+      }
       .itemContainer {
         justify-self: center;
         width: 160px;

@@ -210,11 +210,23 @@ function App() {
       }
       const data = await res.json();
       const gamesListData = data.results;
+    
       const querySelectedElement = document.querySelector(`${querySelector}`);
       const listHeaderSelector = document.querySelector(".genreTitle");
       listHeaderSelector.innerHTML = categoryTitle;
       const platformsHeaderSelector = document.querySelector(".platformsTitle");
       platformsHeaderSelector.innerHTML = platformsTitle;
+      //if no results
+      if(gamesListData.length === 0) {
+        const gamesListDiv = document.createElement("div");
+        const gamesListSpan = document.createElement("span");
+        gamesListDiv.classList.add("noResultsItemContainer");
+        gamesListSpan.textContent = "No results found";
+        gamesListSpan.classList.add("noResultsSpan");
+        gamesListDiv.appendChild(gamesListSpan);
+        querySelectedElement.appendChild(gamesListDiv);
+      }
+      //else fill with results
       gamesListData.forEach((game) => {
         const gamesListDiv = document.createElement("div");
         const gamesListImg = document.createElement("img");
