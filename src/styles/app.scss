@@ -463,6 +463,9 @@ body {
   }
 
   @media screen and (min-width: 765px) {
+    .genericList-wrapper {
+      
+    }
     .categories{
       flex-direction: row;
       justify-content: space-evenly;

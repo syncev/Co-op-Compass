@@ -178,6 +178,8 @@ function App() {
         .join(",")
         .toLowerCase()}`;
     }
+    if(genresArray.length === 0 && platformsArray.length === 0) {
+      return toggleFilter()}
 
     toggleFilter();
     oldListRemover();
