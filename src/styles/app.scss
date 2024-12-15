@@ -254,11 +254,11 @@ body {
       row-gap: 40px;
       padding: 30px 0;
       margin-top: 30px;
-      .noResultsItemContainer{
+      .noResultsItemContainer {
         display: flex;
-        
+
         justify-content: center;
-        .noResultsSpan{
+        .noResultsSpan {
           font-size: 30px;
           color: $complementary-color;
         }
@@ -333,7 +333,7 @@ body {
         width: fit-content;
         background-color: $primaryBtn-color;
         border-radius: 8px;
-        margin: 0 auto;        
+        margin: 0 auto;
         padding: 5px 15px;
         font-size: 18px;
         font-family: "Cabinet Grotesk", sans-serif;
@@ -464,17 +464,38 @@ body {
 
   @media screen and (min-width: 765px) {
     .genericList-wrapper {
-      .genericList{
+      .genericList {
         grid-template-columns: repeat(4, minmax(0, 1fr));
       }
     }
-    .categories{
+    .categories {
       flex-direction: row;
       justify-content: space-evenly;
-      .categories-wrapper{
+      .categories-wrapper {
         width: 50%;
-        .categories-list{
+        .categories-list {
           grid-template-columns: repeat(3, 1fr);
+        }
+      }
+    }
+    .gameDescription {
+      .gameCover {
+        height: 90dvh;
+        background-size: auto 100%;
+      }
+      .gameCard {
+        .gameCard-screenshots-wrapper {
+          .gameCard-screenshots-title {
+            margin: 0 auto;
+            padding: 0;
+          }
+          .gameCard-screenshots-list {
+            .gameCard-screenshots {
+              img {
+                width: 650px;
+              }
+            }
+          }
         }
       }
     }
